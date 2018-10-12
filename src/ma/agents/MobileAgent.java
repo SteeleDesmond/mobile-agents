@@ -1,4 +1,8 @@
 package ma.agents;
 
-public class MobileAgent {
+public class MobileAgent extends Thread
+{
+
+
+
 }
