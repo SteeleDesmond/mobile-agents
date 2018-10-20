@@ -18,7 +18,7 @@ public class Map
     private Node node3;
     private Node node4;
 
-    public Node[] nodes;
+    private Node[] nodes;
 
     /** Lines used to connect the nodes **/
     private Line line1;
@@ -26,14 +26,15 @@ public class Map
     private Line line3;
     private Line line4;
 
-    public Line[] lines;
+    private Line[] lines;
 
-    private Configuration config = new Configuration("./docs/sample.txt");
+    private Configuration config;
+    private DisplayController dc;
 
-
-    public Map()
-    {
-       drawMiniMap();
+    public Map(Configuration config, DisplayController dc) {
+        this.config = config;
+        this.dc = dc;
+        drawMiniMap();
     }
 
     public void drawMiniMap() {
