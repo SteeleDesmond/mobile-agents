@@ -1,15 +1,11 @@
 package MobileAgents.agents;
 
-public class Agent extends Thread
-{
+public class Agent extends Thread {
     private String agentName; // the agents name
-
     public int currentNode; // the current node the agent is at
-
     public int agentID;
 
-    public Agent(String name, int node, int id)
-    {
+    public Agent(String name, int node, int id) {
         currentNode = node;
         agentName = name;
         agentID = id;
@@ -19,45 +15,29 @@ public class Agent extends Thread
      *   Agents Thread
      */
     @Override
-    public void run()
-    {
-        try
-        {
-            while(true)
-            {
+    public void run() {
+        try {
+            while(true) {
                 updateCurrentNode();
                 Thread.sleep(100);
             }
-
-
         }
-
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 
-    public void updateCurrentNode()
-    {
-        if(currentNode > 4)
-        {
+    public void updateCurrentNode() {
+        if(currentNode > 4) {
             currentNode = 0;
         }
-
-        else
-        {
+        else {
             currentNode++;
         }
-
     }
 
     @Override
-    public synchronized String toString()
-    {
+    public synchronized String toString() {
         return agentName + " Node " + currentNode;
     }
-
 }

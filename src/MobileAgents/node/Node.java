@@ -1,27 +1,27 @@
-package MobileAgents.nodes;
+package MobileAgents.node;
 
 import javafx.scene.shape.*;
 
-public class Sensors
-{
-
+/**
+ * Contains fire properties --
+ * Holds different states: isDead, isOkay, nearFire, hasAgent
+ */
+public class Node {
     private int node_xpos;
     private int node_ypos;
 
-    private int nodeNumber;
-
     public Circle node;
 
-    public Sensors(int x, int y, int n)
-    {
+    public Node() {
+    }
+
+    public Node(int x, int y, int n) {
 
         node_xpos = x;
         node_ypos = y;
-        nodeNumber = n;
 
         node = new Circle(x,y,10);
     }
-
 
     public int getNode_xpos()
     {
