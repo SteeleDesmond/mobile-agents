@@ -1,74 +1,62 @@
 package MobileAgents.agents;
 
-import java.util.concurrent.BlockingQueue;
-
-public class Agent implements Runnable
+public class Agent extends Thread
 {
     private String agentName; // the agents name
 
-    private final BlockingQueue <Integer > queue; // this que will hold contain the current node the agent is at
-
     public int currentNode; // the current node the agent is at
 
-    public Agent(String name, int node,BlockingQueue<Integer> queue)
+    public int agentID;
+
+    public Agent(String name, int node, int id)
     {
         currentNode = node;
         agentName = name;
-        this.queue = queue;
+        agentID = id;
     }
 
-
     /**
-     *  Currently this methods job is to update the node, the current agent is on
-     *
-     *  I wanted to simulate an agent transversing a nodes on a map
+     *   Agents Thread
      */
-    private void updatePosition()
+    @Override
+    public void run()
     {
-        currentNode++;
-
-        if(currentNode > 4)
+        try
         {
-            currentNode = 0;
+            while(true)
+            {
+                updateCurrentNode();
+                Thread.sleep(100);
+            }
+
+
+        }
+
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
         }
 
 
     }
 
-    /**
-     *
-     */
-    @Override
-    public void run()
+    public void updateCurrentNode()
     {
-            try
-            {
-                //lets move the agent from nodes 1 - 4
-                for(int i = 1; i < 5; i++)
-                {
-                    queue.put(i);
-                    //create an infinite loop
-                    if (i == 4 )
-                    {
-                        i = 0;
-                    }
-                }
-                System.out.println("Current Agent's Node Position is " + currentNode);
+        if(currentNode > 4)
+        {
+            currentNode = 0;
+        }
 
-                //slow down the simulation so we can see the agent move to a new position
-                Thread.sleep(1000);// will remove only used for testing
-
-            }
-
-            catch (InterruptedException e)
-            {
-                System.out.println(agentName + " was interrupted");
-            }
+        else
+        {
+            currentNode++;
+        }
 
     }
 
     @Override
-    public synchronized String toString() {
+    public synchronized String toString()
+    {
         return agentName + " Node " + currentNode;
     }
 
