@@ -18,19 +18,34 @@ public class Map {
 
         this.dc = dc;
 
-        // Initialize the Nodes used in the simulation
+        // Initialize the Nodes used in the simulation (This assumes there is only one station and one starting fire)
         for (Point p : config.getNodes()) {
-            nodes.add(new Node((int) p.getX(), (int) p.getY()));
+            // If it is the base station
+            if(p.getX() == config.getStation().get(0).getX() && p.getY() == config.getStation().get(0).getY()) {
+                nodes.add(new Node((int) p.getX(), (int) p.getY(), "station"));
+            }
+            // If it is the fire starting node
+            else if (p.getX() == config.getFireStart().get(0).getX() && p.getY() == config.getFireStart().get(0).getY()) {
+                nodes.add(new Node((int) p.getX(), (int) p.getY(), "fire"));
+            }
+            // Else it is a standard node
+            else {
+                nodes.add(new Node((int) p.getX(), (int) p.getY(), "standard"));
+            }
         }
+        // Initialize the display
+        dc.displayMap(nodes, config.getEdgeStarts(), config.getEdgeEnds());
         buildMap();
-        dc.displayMap(config.getNodes(), config.getEdges());
     }
 
     private void buildMap() {
 
         // Print the node IDs
         for (Node n : nodes) {
-            System.out.println("Node " + n.getNodeId() + " = " + n.getxPos() + " " + n.getyPos());
+            System.out.println("Node " + n.getNodeId() + "(" + n.getState() + "): = " + n.getxPos() + " " + n.getyPos());
+            if(n.getState().equals("standard")) {
+                dc.paintNode(n);
+            }
         }
     }
 
