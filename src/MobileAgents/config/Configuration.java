@@ -15,10 +15,10 @@ import java.util.List;
  */
 public class Configuration {
 
-    private List nodes = new ArrayList();
-    private List edges = new ArrayList();
-    private List station = new ArrayList();
-    private List fire = new ArrayList();
+    private ArrayList<Point> nodes = new ArrayList<>();
+    private ArrayList<Point> edges = new ArrayList<>();
+    private ArrayList<Point> station = new ArrayList<>();
+    private ArrayList<Point> fireStart = new ArrayList<>();
 
     public Configuration(String filePath) {
         parseConfigList(readFileInList(filePath));
@@ -72,13 +72,29 @@ public class Configuration {
                 int y = Character.getNumericValue(currElement.charAt(7));
                 station.add(new Point(x, y));
             }
-            //check to see if its an fire
+            //check to see if its an fireStart
             if (currElement.toLowerCase().startsWith("fire")) {
                 //create a 2D point with the x and y positions after "node"
                 int x = Character.getNumericValue(currElement.charAt(5));
                 int y = Character.getNumericValue(currElement.charAt(7));
-                fire.add(new Point(x, y));
+                fireStart.add(new Point(x, y));
             }
         }
+    }
+
+    public ArrayList<Point> getNodes() {
+        return nodes;
+    }
+
+    public ArrayList<Point> getEdges() {
+        return edges;
+    }
+
+    public ArrayList<Point> getStation() {
+        return station;
+    }
+
+    public ArrayList<Point> getFireStart() {
+        return fireStart;
     }
 }

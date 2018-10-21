@@ -7,30 +7,32 @@ import javafx.scene.shape.*;
  * Holds different states: isDead, isOkay, nearFire, hasAgent
  */
 public class Node {
-    private int node_xpos;
-    private int node_ypos;
+    private int xPos;
+    private int yPos;
 
-    public Circle node;
+    // We may need to implement a different way of tagging the nodes later. This method is from Roman's slides
+    private static int nextId;
+    private int nodeId;
 
     public Node() {
     }
 
-    public Node(int x, int y, int n) {
-
-        node_xpos = x;
-        node_ypos = y;
-
-        node = new Circle(x,y,10);
+    public Node(int x, int y) {
+        xPos = x;
+        yPos = y;
+        this.nodeId = nextId;
+        nextId++;
     }
 
-    public int getNode_xpos()
-    {
-        return node_xpos;
+    public int getxPos() {
+        return xPos;
     }
 
-    public int getNode_ypos()
-    {
-        return node_ypos;
+    public int getyPos() {
+        return yPos;
     }
 
+    public int getNodeId() {
+        return nodeId;
+    }
 }

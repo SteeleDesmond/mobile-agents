@@ -27,7 +27,7 @@ public class MainApp extends Application {
 
         /*Load the FXML file and attach the display controller*/
         primaryStage.setResizable(false);
-        primaryStage.setTitle("Remi Tile");
+        primaryStage.setTitle("Mobile Agents");
         FXMLLoader loader = new FXMLLoader();
         loader.setController(dc);
         BorderPane rootPane = loader.load(getClass().getResourceAsStream("../display/ma-display.fxml"));
@@ -53,8 +53,8 @@ public class MainApp extends Application {
         a.start();
     }
 
-    /** A single display controller is used to interact with the dc files. Necessary to avoid any parallel
-     * instantiation issues with JavaFX and multiple fxml files */
+    /** A single display controller is used to interact with the display FXML file. Necessary to avoid any parallel
+     * instantiation issues with JavaFX and for using multiple fxml files */
     public static DisplayController getDisplayController() {
         return dc;
     }

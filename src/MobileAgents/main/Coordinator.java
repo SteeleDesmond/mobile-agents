@@ -2,7 +2,6 @@ package MobileAgents.main;
 
 import MobileAgents.agents.Agent;
 import MobileAgents.config.Configuration;
-import MobileAgents.display.DisplayController;
 import MobileAgents.display.Map;
 
 /**
@@ -16,6 +15,9 @@ public class Coordinator {
         map = new Map(config, MainApp.getDisplayController());
     }
 
+    /**
+     * Called continuously by MainApp
+     */
     public void update() {
 //        agent1.start();
 //        sceneDisplayController.start();
