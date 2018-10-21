@@ -3,7 +3,9 @@ package MobileAgents.display;
 import MobileAgents.node.Node;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -12,8 +14,7 @@ import java.util.ArrayList;
 
 public class DisplayController {
     /** Graphics Components **/
-    @FXML GridPane nodeGrid;
-    @FXML StackPane mapOverlay;
+    @FXML Pane mapPane;
 
     public DisplayController() {
     }
@@ -29,22 +30,23 @@ public class DisplayController {
 //        nodeGrid.getChildren().add(line1);
 
         for(Point p : nodes) {
-            Circle node = new Circle(0, 0, 10);
+            Circle node = new Circle((int) p.getX()*75, (int) p.getY()*75, 10);
+            node.setFill(Color.DODGERBLUE);
             //nodeGrid.getChildren().add(node);
-            nodeGrid.add(node, (int) p.getX(), (int) p.getY());
+            mapPane.getChildren().add(node);
         }
         for(int i = 0; i < edgeStarts.size() && i < edgeEnds.size(); i++) {
-            Line line = new Line(edgeStarts.get(i).getX(), edgeStarts.get(i).getY(), edgeEnds.get(i).getX(), edgeEnds.get(i).getY());
-            mapOverlay.getChildren().add(line);
+            Line line = new Line(edgeStarts.get(i).getX()*75, edgeStarts.get(i).getY()*75,
+                                    edgeEnds.get(i).getX()*75, edgeEnds.get(i).getY()*75);
+            mapPane.getChildren().add(line);
         }
     }
 
     /**
-     * Takes a node and displays it
-     * @param x location
-     * @param y location
+     * Reads a given node's state and paints it an appropriate color
+     * @param node Node to paint
      */
-    public void paintNode(int x, int y) {
+    public void paintNode(Node node) {
 
     }
 
