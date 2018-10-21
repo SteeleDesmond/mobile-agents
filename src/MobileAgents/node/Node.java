@@ -7,7 +7,7 @@ import javafx.scene.shape.*;
  * Holds different states --> Represented via State string. States are: "standard", "station", "fire", "near-fire"
  * State strings must be exact
  */
-public class Node {
+public class Node extends Thread {
     private int xPos;
     private int yPos;
     private String state;
@@ -19,6 +19,9 @@ public class Node {
     public Node() {
     }
 
+    /**
+     * Initialize routing table
+     */
     public Node(int x, int y, String state) {
         this.state = state;
         xPos = x;
@@ -27,11 +30,11 @@ public class Node {
         nextId++;
     }
 
-    public int getxPos() {
+    public int getXPos() {
         return xPos;
     }
 
-    public int getyPos() {
+    public int getYPos() {
         return yPos;
     }
 
@@ -39,11 +42,11 @@ public class Node {
         return nodeId;
     }
 
-    public String getState() {
+    public String getNodeState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setNodeState(String state) {
         this.state = state;
     }
 }
