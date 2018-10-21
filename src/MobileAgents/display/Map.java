@@ -2,77 +2,42 @@ package MobileAgents.display;
 
 import MobileAgents.config.Configuration;
 import MobileAgents.node.Node;
-import javafx.scene.shape.Line;
 
-import java.util.List;
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
- * Map used by the display object. Stores a list of nodes for the display
+ * Map used by the display object. Stores a list of nodePoints for the display
  */
-public class Map
-{
+public class Map {
 
-    /** Node used to build node **/
-    private Node node1;
-    private Node node2;
-    private Node node3;
-    private Node node4;
+    private DisplayController dc;
+    private ArrayList<Node> nodes = new ArrayList<>(); // Nodes in the map
 
-    public Node[] nodes;
+    public Map(Configuration config, DisplayController dc) {
 
-    /** Lines used to connect the nodes **/
-    private Line line1;
-    private Line line2;
-    private Line line3;
-    private Line line4;
+        this.dc = dc;
 
-    public Line[] lines;
-
-    private Configuration config = new Configuration("./docs/sample.txt");
-
-
-    public Map()
-    {
-       drawMiniMap();
+        // Initialize the Nodes used in the simulation
+        for (Point p : config.getNodes()) {
+            nodes.add(new Node((int) p.getX(), (int) p.getY()));
+        }
+        buildMap();
+        dc.displayMap(config.getNodes(), config.getEdges());
     }
 
-    public void drawMiniMap() {
+    private void buildMap() {
 
-        //initialize the nodes(node)
-        node1 = new Node(0,295,1);
-        node2 = new Node(270,400,2);
-        node3 = new Node(405,500,3);
-        node4 = new Node(450,265,4);
-
-        nodes = new Node[4];
-        nodes[0] = node1;
-        nodes[1] = node2;
-        nodes[2] = node3;
-        nodes[3] = node4;
-
-        /**Initialize the lines **/
-
-        //connect node 1 to node 2
-        line1 = new Line(150,300,270,400);
-
-        //connect node 2 to node 3
-        line2 = new Line(270,400,410,500);
-
-        //connect  node 3 to node 4
-        line3 = new Line(410,500,450,270);
-
-        //connect node 4 to node 1
-        line4 = new Line(450,270,150,300);
-
-        lines = new Line[4];
-
-        lines[0] = line1;
-        lines[1]= line2;
-        lines[2] = line3;
-        lines[3]= line4;
+        // Print the node IDs
+        for (Node n : nodes) {
+            System.out.println("Node " + n.getNodeId() + " = " + n.getxPos() + " " + n.getyPos());
+        }
     }
 
-    public void mobileAgentMap() {
+    /**
+     * Loop over the list of nodes and check if their state has changed. If it has, tell the display to paint the node
+     */
+    public void checkNodeStates() {
 
     }
 }
