@@ -37,7 +37,8 @@ public class Agent extends Thread {
     }
 
     @Override
-    public synchronized String toString() {
+    public synchronized String toString()
+    {
         return agentName + " Node " + currentNode;
     }
 }
