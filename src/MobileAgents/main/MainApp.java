@@ -26,6 +26,8 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         /*Load the FXML file and attach the display controller*/
+        primaryStage.setHeight(600);
+        primaryStage.setWidth(800);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Mobile Agents");
         FXMLLoader loader = new FXMLLoader();

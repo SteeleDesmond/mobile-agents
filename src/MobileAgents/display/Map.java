@@ -23,7 +23,7 @@ public class Map {
             nodes.add(new Node((int) p.getX(), (int) p.getY()));
         }
         buildMap();
-        dc.displayMap(config.getNodes(), config.getEdges());
+        dc.displayMap(config.getNodes(), config.getEdgeStarts(), config.getEdgeEnds());
     }
 
     private void buildMap() {
