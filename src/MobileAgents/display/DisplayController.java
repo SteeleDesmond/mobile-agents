@@ -27,7 +27,7 @@ public class DisplayController {
 
         // Display the nodes
         for(Node n : nodes) {
-            Circle node = new Circle(n.getxPos()*75, n.getyPos()*75, 10);
+            Circle node = new Circle(n.getXPos()*75, n.getYPos()*75, 10);
             nodeCircles.add(node);
             nodePane.getChildren().add(node);
             paintNode(n);
@@ -48,19 +48,19 @@ public class DisplayController {
     public void paintNode(Node node) {
         Circle nodeToChange = new Circle();
         for(Circle c : nodeCircles) {
-            if(c.getCenterX() == node.getxPos()*75 && c.getCenterY() == node.getyPos() * 75) {
+            if(c.getCenterX() == node.getXPos()*75 && c.getCenterY() == node.getYPos() * 75) {
                 nodeToChange = c;
             }
         }
         // Paint standard node color
-        if(node.getState().equals("standard")) {
+        if(node.getNodeState().equals("standard")) {
             nodeToChange.setFill(Color.DODGERBLUE);
         }
-        else if(node.getState().equals("near-fire")) {
+        else if(node.getNodeState().equals("near-fire")) {
             nodeToChange.setFill(Color.ORANGE);
         }
         // Paint fire color
-        else if(node.getState().equals("fire")) {
+        else if(node.getNodeState().equals("fire")) {
             nodeToChange.setFill(Color.ORANGERED);
         }
         // Paint station color
