@@ -14,7 +14,8 @@ import java.util.ArrayList;
 
 public class DisplayController {
     /** Graphics Components **/
-    @FXML Pane mapPane;
+    @FXML Pane nodePane;
+    @FXML Pane edgePane;
 
     public DisplayController() {
     }
@@ -32,13 +33,12 @@ public class DisplayController {
         for(Point p : nodes) {
             Circle node = new Circle((int) p.getX()*75, (int) p.getY()*75, 10);
             node.setFill(Color.DODGERBLUE);
-            //nodeGrid.getChildren().add(node);
-            mapPane.getChildren().add(node);
+            nodePane.getChildren().add(node);
         }
         for(int i = 0; i < edgeStarts.size() && i < edgeEnds.size(); i++) {
             Line line = new Line(edgeStarts.get(i).getX()*75, edgeStarts.get(i).getY()*75,
                                     edgeEnds.get(i).getX()*75, edgeEnds.get(i).getY()*75);
-            mapPane.getChildren().add(line);
+            edgePane.getChildren().add(line);
         }
     }
 
