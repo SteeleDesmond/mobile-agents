@@ -42,7 +42,7 @@ public class Map {
 
         // Print the node IDs
         for (Node n : nodes) {
-            System.out.println("Node " + n.getNodeId() + "(" + n.getState() + "): = " + n.getxPos() + " " + n.getyPos());
+            System.out.println("Node " + n.getNodeId() + "(" + n.getNodeState() + "): = " + n.getXPos() + " " + n.getYPos());
             if(n.getState().equals("standard")) {
                 dc.paintNode(n);
             }
