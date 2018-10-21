@@ -73,8 +73,8 @@ public class Configuration {
             //check to see if its an station
             if (currElement.toLowerCase().startsWith("station")) {
                 //create a 2D point with the x and y positions after "node"
-                x = Character.getNumericValue(currElement.charAt(5));
-                y = Character.getNumericValue(currElement.charAt(7));
+                x = Character.getNumericValue(currElement.charAt(8));
+                y = Character.getNumericValue(currElement.charAt(10));
                 station.add(new Point(x, y));
             }
             //check to see if its an fireStart
