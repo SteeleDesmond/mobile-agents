@@ -5,28 +5,28 @@
 <?import javafx.scene.layout.StackPane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <Pane prefHeight="80.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
-   </top>
-   <left>
-      <Pane prefHeight="240.0" prefWidth="120.0" BorderPane.alignment="CENTER" />
-   </left>
-   <right>
-      <Pane prefHeight="240.0" prefWidth="120.0" BorderPane.alignment="CENTER" />
-   </right>
-   <bottom>
-      <Pane prefHeight="80.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
-   </bottom>
-   <center>
-      <StackPane BorderPane.alignment="CENTER">
-         <children>
-            <Pane fx:id="edgePane" prefHeight="200.0" prefWidth="200.0" />
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <Pane fx:id="nodePane" prefHeight="200.0" prefWidth="200.0" />
-               </children>
-            </StackPane>
-         </children>
-      </StackPane>
-   </center>
+    <top>
+        <Pane prefHeight="80.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+    </top>
+    <left>
+        <Pane prefHeight="240.0" prefWidth="120.0" BorderPane.alignment="CENTER" />
+    </left>
+    <right>
+        <Pane prefHeight="240.0" prefWidth="120.0" BorderPane.alignment="CENTER" />
+    </right>
+    <bottom>
+        <Pane prefHeight="80.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+    </bottom>
+    <center>
+        <StackPane BorderPane.alignment="CENTER">
+            <children>
+                <Pane fx:id="edgePane" prefHeight="200.0" prefWidth="200.0" />
+                <StackPane prefHeight="150.0" prefWidth="200.0">
+                    <children>
+                        <Pane fx:id="nodePane" prefHeight="200.0" prefWidth="200.0" />
+                    </children>
+                </StackPane>
+            </children>
+        </StackPane>
+    </center>
 </BorderPane>

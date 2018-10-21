@@ -1,6 +1,5 @@
 package MobileAgents.main;
 
-import MobileAgents.agents.Agent;
 import MobileAgents.config.Configuration;
 import MobileAgents.display.Map;
 
@@ -11,8 +10,9 @@ public class Coordinator {
 
     private Map map;
 
-    public Coordinator(Configuration config) {
-        map = new Map(config, MainApp.getDisplayController());
+    public Coordinator(Configuration config)
+    {
+       // map = new Map(config, MainApp.getDisplayController());
     }
 
     /**
