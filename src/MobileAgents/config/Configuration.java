@@ -16,7 +16,8 @@ import java.util.List;
 public class Configuration {
 
     private ArrayList<Point> nodes = new ArrayList<>();
-    private ArrayList<Point> edges = new ArrayList<>();
+    private ArrayList<Point> edgeStarts = new ArrayList<>();
+    private ArrayList<Point> edgeEnds = new ArrayList<>();
     private ArrayList<Point> station = new ArrayList<>();
     private ArrayList<Point> fireStart = new ArrayList<>();
 
@@ -48,35 +49,39 @@ public class Configuration {
     private void parseConfigList(List configList) {
         for (int i = 0; i < configList.size(); i++) {
 
-            // grab the first element in the configuration list
+            int x, y;
+            // grab the next element in the configuration list
             String currElement = configList.get(i).toString();
 
-            //check to see if its a node
             if (currElement.toLowerCase().startsWith("node")) {
                 //create a 2D point with the x and y positions after "node"
-                int x = Character.getNumericValue(currElement.charAt(5));
-                int y = Character.getNumericValue(currElement.charAt(7));
+                x = Character.getNumericValue(currElement.charAt(5));
+                y = Character.getNumericValue(currElement.charAt(7));
                 nodes.add(new Point(x, y));
             }
-            //check to see if its an edge
+            //check for an edge
             if (currElement.toLowerCase().startsWith("edge")) {
-                //create a 2D point with the x and y positions after "node"
-                int x = Character.getNumericValue(currElement.charAt(5));
-                int y = Character.getNumericValue(currElement.charAt(7));
-                edges.add(new Point(x, y));
+                // Add the starting edgeStarts location
+                x = Character.getNumericValue(currElement.charAt(5));
+                y = Character.getNumericValue(currElement.charAt(7));
+                edgeStarts.add(new Point(x, y));
+                // Add the ending edge location
+                x = Character.getNumericValue(currElement.charAt(9));
+                y = Character.getNumericValue(currElement.charAt(11));
+                edgeEnds.add(new Point(x, y));
             }
             //check to see if its an station
             if (currElement.toLowerCase().startsWith("station")) {
                 //create a 2D point with the x and y positions after "node"
-                int x = Character.getNumericValue(currElement.charAt(5));
-                int y = Character.getNumericValue(currElement.charAt(7));
+                x = Character.getNumericValue(currElement.charAt(8));
+                y = Character.getNumericValue(currElement.charAt(10));
                 station.add(new Point(x, y));
             }
             //check to see if its an fireStart
             if (currElement.toLowerCase().startsWith("fire")) {
                 //create a 2D point with the x and y positions after "node"
-                int x = Character.getNumericValue(currElement.charAt(5));
-                int y = Character.getNumericValue(currElement.charAt(7));
+                x = Character.getNumericValue(currElement.charAt(5));
+                y = Character.getNumericValue(currElement.charAt(7));
                 fireStart.add(new Point(x, y));
             }
         }
@@ -86,9 +91,11 @@ public class Configuration {
         return nodes;
     }
 
-    public ArrayList<Point> getEdges() {
-        return edges;
+    public ArrayList<Point> getEdgeStarts() {
+        return edgeStarts;
     }
+
+    public ArrayList<Point> getEdgeEnds() { return edgeEnds; }
 
     public ArrayList<Point> getStation() {
         return station;

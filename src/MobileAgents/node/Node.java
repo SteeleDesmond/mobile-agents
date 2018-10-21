@@ -4,11 +4,13 @@ import javafx.scene.shape.*;
 
 /**
  * Contains fire properties --
- * Holds different states: isDead, isOkay, nearFire, hasAgent
+ * Holds different states --> Represented via State string. States are: "standard", "station", "fire", "near-fire"
+ * State strings must be exact
  */
 public class Node {
     private int xPos;
     private int yPos;
+    private String state;
 
     // We may need to implement a different way of tagging the nodes later. This method is from Roman's slides
     private static int nextId;
@@ -17,7 +19,8 @@ public class Node {
     public Node() {
     }
 
-    public Node(int x, int y) {
+    public Node(int x, int y, String state) {
+        this.state = state;
         xPos = x;
         yPos = y;
         this.nodeId = nextId;
@@ -34,5 +37,13 @@ public class Node {
 
     public int getNodeId() {
         return nodeId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
