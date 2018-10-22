@@ -10,9 +10,8 @@ public class Coordinator {
 
     private Map map;
 
-    public Coordinator(Configuration config)
-    {
-       // map = new Map(config, MainApp.getDisplayController());
+    public Coordinator(Configuration config) {
+       map = new Map(config, MainApp.getDisplayController());
     }
 
     /**

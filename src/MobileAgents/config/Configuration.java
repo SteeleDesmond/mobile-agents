@@ -20,9 +20,13 @@ public class Configuration {
     private ArrayList<Point> edgeEnds = new ArrayList<>();
     private ArrayList<Point> station = new ArrayList<>();
     private ArrayList<Point> fireStart = new ArrayList<>();
+    private ArrayList<Point> routingTables = new ArrayList<>();
 
     public Configuration(String filePath) {
         parseConfigList(readFileInList(filePath));
+//        for(Point p : nodes) {
+//            System.out.println((int) p.getX() + " " + (int) p.getY() + " :" + getNodeNeighbors(p));
+//        }
     }
 
     /**
@@ -85,6 +89,20 @@ public class Configuration {
                 fireStart.add(new Point(x, y));
             }
         }
+    }
+
+    public ArrayList<Point> getNodeNeighbors(Point node) {
+
+        ArrayList<Point> neighbors = new ArrayList<>();
+        for(int i = 0; i < edgeStarts.size() && i < edgeEnds.size(); i++) {
+            if(edgeStarts.get(i).getX() == node.getX() && edgeStarts.get(i).getY() == node.getY()) {
+                neighbors.add(edgeEnds.get(i));
+            }
+            else if(edgeEnds.get(i).getX() == node.getX() && edgeEnds.get(i).getY() == node.getY()) {
+                neighbors.add(edgeStarts.get(i));
+            }
+        }
+        return neighbors;
     }
 
     public ArrayList<Point> getNodes() {
