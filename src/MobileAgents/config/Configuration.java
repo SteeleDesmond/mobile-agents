@@ -25,7 +25,7 @@ public class Configuration {
     public Configuration(String filePath) {
         parseConfigList(readFileInList(filePath));
 //        for(Point p : nodes) {
-//            System.out.println((int) p.getX() + " " + (int) p.getY() + " :" + getNodeNeighbors(p));
+//            System.out.println((int) p.getX() + " " + (int) p.getY() + " :" + getNodeNeighbors((int)p.getX(), (int)p.getY()));
 //        }
     }
 
@@ -91,14 +91,20 @@ public class Configuration {
         }
     }
 
-    public ArrayList<Point> getNodeNeighbors(Point node) {
+    /**
+     * Returns an arraylist of all neighboring nodes of a node. Neighboring nodes are ones connected by an edge
+     * @param x coordinate position of the node
+     * @param y coordinate position of the node
+     * @return An arraylist of all neighboring nodes of the given node
+     */
+    public ArrayList<Point> getNodeNeighbors(int x, int y) {
 
         ArrayList<Point> neighbors = new ArrayList<>();
         for(int i = 0; i < edgeStarts.size() && i < edgeEnds.size(); i++) {
-            if(edgeStarts.get(i).getX() == node.getX() && edgeStarts.get(i).getY() == node.getY()) {
+            if(edgeStarts.get(i).getX() == x && edgeStarts.get(i).getY() == y) {
                 neighbors.add(edgeEnds.get(i));
             }
-            else if(edgeEnds.get(i).getX() == node.getX() && edgeEnds.get(i).getY() == node.getY()) {
+            else if(edgeEnds.get(i).getX() == x && edgeEnds.get(i).getY() == y) {
                 neighbors.add(edgeStarts.get(i));
             }
         }
