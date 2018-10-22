@@ -79,6 +79,7 @@ public class Map {
         for(int i = 0; i < config.getEdgeStarts().size() && i < config.getEdgeEnds().size(); i++) {
             // If the edgeStart position is at the node passed in add its connected neighbor to the list
             if(config.getEdgeStarts().get(i).getX() == n.getXPos() && config.getEdgeStarts().get(i).getY() == n.getYPos()) {
+                // Find the neighbor node
                 for(Node node : nodes) {
                    if(node.getXPos() == config.getEdgeEnds().get(i).getX() && node.getYPos() == config.getEdgeEnds().get(i).getY()) {
                        neighbors.add(node);
@@ -89,6 +90,7 @@ public class Map {
             // If the edgeEnd position is at the node passed in add its connected neighbor to the list
             else if(config.getEdgeEnds().get(i).getX() == n.getXPos() && config.getEdgeEnds().get(i).getY() == n.getYPos()) {
                 for(Node node : nodes) {
+                    // Find the neighbor node
                     if(node.getXPos() == config.getEdgeStarts().get(i).getX() && node.getYPos() == config.getEdgeStarts().get(i).getY()) {
                         neighbors.add(node);
                         break;
