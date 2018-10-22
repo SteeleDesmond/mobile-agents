@@ -19,7 +19,7 @@ public class MultiPoint
     public void printCoords()
     {
         for(int i=0; i<coords.length; i++){
-            System.out.println("Coordinate #"+i+": "+coords[i]);
+            System.out.println("Coordinate #"+i+": "+ coords[i]);
         }
         System.out.println("");
     }

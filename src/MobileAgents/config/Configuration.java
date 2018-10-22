@@ -20,6 +20,7 @@ public class Configuration {
     private ArrayList<Point> edgeEnds = new ArrayList<>();
     private ArrayList<Point> station = new ArrayList<>();
     private ArrayList<Point> fireStart = new ArrayList<>();
+    private ArrayList<Point> routingTables = new ArrayList<>();
 
     public Configuration(String filePath) {
         parseConfigList(readFileInList(filePath));
