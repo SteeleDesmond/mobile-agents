@@ -48,7 +48,7 @@ public class MainApp extends Application {
 
                 if(now > nextTime) {
                     coordinator.update();
-                    nextTime = now + Duration.ofMillis(1).toNanos();
+                    nextTime = now + Duration.ofSeconds(2).toNanos();
                 }
             }
         };

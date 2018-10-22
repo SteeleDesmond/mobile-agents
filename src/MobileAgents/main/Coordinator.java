@@ -12,14 +12,14 @@ public class Coordinator {
 
     public Coordinator(Configuration config)
     {
-        map = new Map(config, MainApp.getDisplayController());
+       // map = new Map(config, MainApp.getDisplayController());
     }
 
     /**
      * Called continuously by MainApp
      */
     public void update() {
-//      agent1.start();
-
+//        agent1.start();
+//        sceneDisplayController.start();
     }
 }
