@@ -7,14 +7,14 @@ import java.util.ArrayList;
  */
 public class RoutingTable {
 
-    private ArrayList<Node> nodes = new ArrayList<>();
+    private ArrayList<Node> neighbors = new ArrayList<>();
 
-    public ArrayList<Node> getNodes() {
-        return nodes;
+    public ArrayList<Node> getNeighbors() {
+        return neighbors;
     }
 
     public void add(Node n) {
-        nodes.add(n);
+        neighbors.add(n);
     }
 
     public void addAll() {
