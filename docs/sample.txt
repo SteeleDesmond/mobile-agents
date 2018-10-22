@@ -1,4 +1,4 @@
-node 0 0
+znode 0 0
 node 3 0
 node 5 0
 node 7 0
