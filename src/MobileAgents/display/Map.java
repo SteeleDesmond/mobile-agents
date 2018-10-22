@@ -34,7 +34,7 @@ public class Map {
             }
         }
         // Initialize the display
-        dc.displayMap(nodes, config.getEdgeStarts(), config.getEdgeEnds());
+        dc.displayMap(nodes,config.getEdges());
         buildMap();
     }
 

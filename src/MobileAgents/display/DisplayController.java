@@ -1,5 +1,6 @@
 package MobileAgents.display;
 
+import MobileAgents.config.MultiPoint;
 import MobileAgents.node.Node;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -20,24 +21,32 @@ public class DisplayController {
      * Display the initial map of nodes and edges. The FXML file contains a StackPane with the nodePane on
      * top of the edgePane.
      * @param nodes A list of node objects containing locations and states
-     * @param edgeStarts A list of starting locations of edges
-     * @param edgeEnds A list of ending locations of edges
+     * @param edges A list of of the locations of edges
+     *
      */
-    public void displayMap(ArrayList<Node> nodes, ArrayList<Point> edgeStarts, ArrayList<Point> edgeEnds) {
+    public void displayMap(ArrayList<Node> nodes, ArrayList<MultiPoint> edges) {
 
+        int startX = 75; //
+        int startY = 75;
         // Display the nodes
         for(Node n : nodes) {
-            Circle node = new Circle(n.getXPos()*75, n.getYPos()*75, 10);
+            Circle node = new Circle(n.getXPos()*startX, n.getYPos()*startY, 10);
             nodeCircles.add(node);
             nodePane.getChildren().add(node);
             paintNode(n);
         }
 
         // Display the edges between nodes
-        for(int i = 0; i < edgeStarts.size() && i < edgeEnds.size(); i++) {
-            Line line = new Line(edgeStarts.get(i).getX()*75, edgeStarts.get(i).getY()*75,
-                                    edgeEnds.get(i).getX()*75, edgeEnds.get(i).getY()*75);
+        for (MultiPoint p : edges)
+        {
+            double x1 = p.getCoords()[0];
+            double y1 = p.getCoords()[1];
+            double x2 = p.getCoords()[2];
+            double y2 = p.getCoords()[3];
+
+            Line line = new Line( startX * x1, startY * y1, startX * x2, startY * y2);
             edgePane.getChildren().add(line);
+
         }
     }
 

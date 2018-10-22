@@ -11,11 +11,14 @@ public class MultiPoint
     private double[] coords;
 
 
-    //construct an anrray of n points
+    //construct an an array of n points
     public MultiPoint(double... coords){
         this.coords = coords;
     }
 
+    /**
+     * Prints array containing the multipoints
+     */
     public void printCoords()
     {
         for(int i=0; i<coords.length; i++){
@@ -24,10 +27,14 @@ public class MultiPoint
         System.out.println("");
     }
 
+    /**
+     *
+     */
     public double[] getCoords()
     {
         return coords;
     }
+    
 
     @Override
     public  String toString() {
