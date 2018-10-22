@@ -14,6 +14,7 @@ public class DisplayController {
     /** Graphics Components **/
     @FXML private Pane nodePane;
     @FXML private Pane edgePane;
+    private boolean started;
     private ArrayList<Circle> nodeCircles = new ArrayList<>();
 
     /**
@@ -80,5 +81,14 @@ public class DisplayController {
      */
     public void updateTable() {
 
+    }
+
+    @FXML
+    public void startButtonPressed() {
+        started = true;
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 }

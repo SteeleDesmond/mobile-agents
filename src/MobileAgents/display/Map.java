@@ -25,6 +25,19 @@ public class Map {
         // Initialize the display
         dc.displayMap(nodes, config.getEdgeStarts(), config.getEdgeEnds());
 
+
+        // For testing! The nodes have to set their own state
+        // ---------------------------------------------------------------
+        for(Node n : nodes) {
+            if(n.getNodeState().equals("fire")) {
+                for(Node neighbors : n.getRoutingTable().getNeighbors()) {
+                    neighbors.setNodeState("near-fire");
+                    dc.paintNode(neighbors);
+                }
+            }
+        }
+        // ---------------------------------------------------------------
+
         checkNodeStates();
     }
 
@@ -108,16 +121,20 @@ public class Map {
      */
     public void checkNodeStates() {
 
-        // For testing! The nodes have to set their own state
-        // ---------------------------------------------------------------
         for(Node n : nodes) {
-            if(n.getNodeState().equals("fire")) {
-                for(Node neighbors : n.getRoutingTable().getNeighbors()) {
-                    neighbors.setNodeState("near-fire");
-                    dc.paintNode(neighbors);
-                }
-            }
+            dc.paintNode(n);
         }
-        // ---------------------------------------------------------------
     }
+
+    public boolean start() {
+        return dc.isStarted();
+    }
+
+    /**
+     * Used by Coordinator to spread the fire
+     */
+    public ArrayList<Node> getNodes() {
+        return nodes;
+    }
+
 }
