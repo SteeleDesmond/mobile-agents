@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Map used by the display object. Stores a list of nodePoints for the display
  */
-public class Map {
+public class Map extends Thread  {
 
     private DisplayController dc;
     private ArrayList<Node> nodes = new ArrayList<>(); // Nodes in the map
@@ -20,6 +20,8 @@ public class Map {
     private Configuration config;
 
     Agent agent1;
+
+    private boolean isTest = true;
 
     public Map(Configuration config, DisplayController dc)
     {
@@ -30,6 +32,7 @@ public class Map {
         initializeMap();
         buildMap();
         updateMap();
+        start();
 
         testFireSimulation();
 
@@ -113,6 +116,7 @@ public class Map {
             n.setRoutingTable(rt);
         }
       // printNodes();
+        agent1.start();
     }
 
     /**
@@ -129,6 +133,7 @@ public class Map {
      */
     public void updateAgent()
     {
+
         RoutingTable rt = new RoutingTable();
 
         //Create the agents routing table based of its neighbor nodes
@@ -136,11 +141,11 @@ public class Map {
         {
             rt.add(node);
         }
+
         agent1.currentNode.setRoutingTable(rt);
 
-        //perform random walk
-        agent1.randonWalk();
-        dc.paintNode(agent1.currentNode);
+        agent1.currentNode.setNodeState("agent");
+
     }
     /**
      * Builds a list of nodes that neighbor a given node
@@ -200,7 +205,7 @@ public class Map {
         }
     }
 
-    public boolean start() {
+    public boolean isStart() {
         return dc.isStarted();
     }
 
@@ -242,6 +247,24 @@ public class Map {
             }
         }
 
+    }
+
+    /**
+     *   Agents Thread
+     */
+    @Override
+    public void run() {
+        try {
+            while(true)
+            {
+                updateMap();
+                System.out.println("test");
+                Thread.sleep(1000);
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
