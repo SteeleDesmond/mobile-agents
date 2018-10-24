@@ -19,6 +19,8 @@ public class Map {
 
     private Configuration config;
 
+    Agent agent1;
+
     public Map(Configuration config, DisplayController dc)
     {
 
@@ -31,9 +33,7 @@ public class Map {
 
         testFireSimulation();
 
-
     }
-
     /**
      *  Initialize the map and the display
      */
@@ -57,9 +57,35 @@ public class Map {
 
         //initialize the display
         dc.displayMap(nodes, config.getEdges());
+
+        //initialize the agents
+        initializeAgents();
     }
 
+    /**
+     *  Initialize all the agents at the base station
+     */
+    public void initializeAgents()
+    {
+        //reference to the base station
+        double x = config.getStation().get(0).getX();
+        double y = config.getStation().get(0).getY();
+        Node station = null;
 
+        for(Node n : nodes) {
+            if (n.getXPos() == x && n.getYPos() == y) {
+                station = n;
+                break;
+            }
+        }
+
+        //initialize the agent at the station
+        agent1 = new Agent( 1,station);
+    }
+
+    /**
+     *
+     */
     private void buildMap()
     {
         // Construct the nodes and add them to the nodes list
@@ -86,9 +112,7 @@ public class Map {
             }
             n.setRoutingTable(rt);
         }
-
-       printNodes();
-
+      // printNodes();
     }
 
     /**
@@ -105,40 +129,19 @@ public class Map {
      */
     public void updateAgent()
     {
+        RoutingTable rt = new RoutingTable();
 
-        double x = config.getStation().get(0).getX();
-        double y = config.getStation().get(0).getY();
+        //Create the agents routing table based of its neighbor nodes
+        for(Node node : getNodeNeighbors(agent1.currentNode))
+        {
+            rt.add(node);
+        }
+        agent1.currentNode.setRoutingTable(rt);
 
-        //reference to the base station
-        Node station = new Node((int)x,(int)y,"station");
-
-        //Initialize the agent at the base station
-        Agent agent1 = new Agent("Agent1", 1,station);
-        agent1.start();
-
-        System.out.print("Before Random Walk Agents Position = ");
-        agent1.printAgentsPosition();
-
-        agent1.randonWalk(getNodeNeighbors(station));
-
-        System.out.print("After Random Walk Agents Position = ");
-        agent1.printAgentsPosition();
-
-        //change the node states that the agent is sitting at
-        agent1.currentNode.setNodeState("agent");
-
-
-        //paint the node's color black for testing
-        int newX = (int)agent1.currentNode.getNodePos().getXCoord();
-        int newY = (int)agent1.currentNode.getNodePos().getYCoord();
-
-
-        Node tempNode = new Node(newX,newY,"agent");
-
-        dc.paintNode(tempNode);
-
+        //perform random walk
+        agent1.randonWalk();
+        dc.paintNode(agent1.currentNode);
     }
-
     /**
      * Builds a list of nodes that neighbor a given node
      * @param n The node
@@ -186,7 +189,6 @@ public class Map {
 
         return neighbors;
     }
-
 
     /**
      * Loop over the list of nodes and check if their state has changed. If it has, tell the display to paint the node
@@ -241,7 +243,5 @@ public class Map {
         }
 
     }
-
-
 
 }
