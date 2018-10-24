@@ -2,27 +2,26 @@ package MobileAgents.agents;
 
 import MobileAgents.config.MultiPoint;
 import MobileAgents.node.Node;
-import java.util.Random;
 import java.util.Collections;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Agent extends Thread {
-    private String agentName; // the agents name
+
     public Node currentNode; // agents current position
     private int xpos;
     private int ypos;
     private int agentID;
 
     public boolean isCloneable = false;
+    public boolean isSearching = true; // true when the agent should perform random walk
 
-    public Agent(String name, int id, Node p) {
+    public Agent(int id, Node p) {
         currentNode = p;
-        agentName = name;
         agentID = id;
 
         xpos = p.getXPos();
         ypos = p.getYPos();
+
     }
 
     /**
@@ -31,10 +30,13 @@ public class Agent extends Thread {
     @Override
     public void run() {
         try {
-            while(true)
+            while(isSearching)
             {
-
-                Thread.sleep(100);
+                if(currentNode.getRoutingTable() != null)
+                {
+                    randonWalk();
+                }
+                Thread.sleep(1000);
             }
         }
         catch (InterruptedException e) {
@@ -44,14 +46,14 @@ public class Agent extends Thread {
 
 
     /**
-     *  Picks a random node from list past in, and updates the agents current node to the random node
-     *  Ideally the only list that should be passed is the nodes that neighbor the agent
-     * @param nodes
+     *  Picks a random node from a list of neighbors, and updates the agents current node to the random node
      */
-    public void randonWalk(ArrayList<Node> nodes)
+    public void randonWalk()
     {
 
         MultiPoint random_point;
+
+        ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
 
         boolean foundSpace = false;
         boolean noSpace = false;
@@ -59,7 +61,7 @@ public class Agent extends Thread {
         int counter = 0;
 
         //lets shuffle our list of nodes so we choose from random nodes
-        Collections.shuffle(nodes);
+        Collections.shuffle(neighbors);
 
         // this will continue until 1 of 2 cases are met
         // 1. The agent has found an unoccupied node
@@ -67,15 +69,15 @@ public class Agent extends Thread {
         while(!foundSpace && !noSpace)
         {
             //grab a random node from the list
-            Node random_node = nodes.get(counter);
+            Node random_node = neighbors.get(counter);
 
             //check if the node is occupied
             if(!random_node.getIsOccupied())
             {
                 //store the random nodes point
                 random_point = new MultiPoint(random_node.getXPos(),random_node.getYPos());
-                //set the agents current position to the new random point
-                currentNode.setNodePos(random_point);
+
+                currentNode = random_node;
                 //case 1 has been met, exit the loop
                 foundSpace = true;
 
@@ -87,7 +89,7 @@ public class Agent extends Thread {
                 counter++;
 
                 // case 2  has been been met all the nodes are occupied
-                if(counter > nodes.size())
+                if(counter > neighbors.size())
                 {
                     noSpace = true;
                 }

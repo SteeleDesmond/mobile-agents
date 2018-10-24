@@ -22,7 +22,7 @@ public class Coordinator {
     public void update() {
 
         // Spread the fire
-        if(map.start()) {
+        if(map.isStart()) {
             // If it's near fire set it on fire
             for(Node n : map.getNodes()) {
                 if(n.getNodeState().equals("near-fire")) {
