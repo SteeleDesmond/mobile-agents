@@ -57,11 +57,16 @@ public class DisplayController {
      */
     public void paintNode(Node node) {
         Circle nodeToChange = new Circle();
+
         for(Circle c : nodeCircles) {
             if(c.getCenterX() == node.getXPos()*75 && c.getCenterY() == node.getYPos() * 75) {
                 nodeToChange = c;
+
             }
         }
+
+
+
         // Paint standard node color
         if(node.getNodeState().equals("standard")) {
             nodeToChange.setFill(Color.DODGERBLUE);
@@ -73,10 +78,18 @@ public class DisplayController {
         else if(node.getNodeState().equals("fire")) {
             nodeToChange.setFill(Color.ORANGERED);
         }
+        //Paint agent color, only used for testing
+        else if(node.getNodeState().equals("agent"))
+        {
+            nodeToChange.setFill(Color.BLACK);
+
+        }
         // Paint station color
         else {
             nodeToChange.setFill(Color.GREEN);
         }
+
+
     }
 
     /**
