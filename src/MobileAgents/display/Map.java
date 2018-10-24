@@ -32,8 +32,8 @@ public class Map extends Thread  {
         initializeMap();
         buildMap();
         updateMap();
+        //start the maps thread
         start();
-
         testFireSimulation();
 
     }
@@ -115,7 +115,8 @@ public class Map extends Thread  {
             }
             n.setRoutingTable(rt);
         }
-      // printNodes();
+        // printNodes();
+        //start the agent thread
         agent1.start();
     }
 
@@ -135,7 +136,6 @@ public class Map extends Thread  {
     {
 
         RoutingTable rt = new RoutingTable();
-
         //Create the agents routing table based of its neighbor nodes
         for(Node node : getNodeNeighbors(agent1.currentNode))
         {
@@ -143,7 +143,7 @@ public class Map extends Thread  {
         }
 
         agent1.currentNode.setRoutingTable(rt);
-
+        //this code is used for testing, to visual see the agent move around the map will be removed
         agent1.currentNode.setNodeState("agent");
 
     }
@@ -250,7 +250,7 @@ public class Map extends Thread  {
     }
 
     /**
-     *   Agents Thread
+     *   Map Thread
      */
     @Override
     public void run() {
@@ -258,7 +258,6 @@ public class Map extends Thread  {
             while(true)
             {
                 updateMap();
-                System.out.println("test");
                 Thread.sleep(1000);
             }
         }
