@@ -21,8 +21,6 @@ public class Map extends Thread  {
 
     Agent agent1;
 
-    private boolean isTest = true;
-
     public Map(Configuration config, DisplayController dc)
     {
 
