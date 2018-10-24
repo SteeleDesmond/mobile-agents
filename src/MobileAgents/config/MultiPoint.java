@@ -22,9 +22,8 @@ public class MultiPoint
     public void printCoords()
     {
         for(int i=0; i<coords.length; i++){
-            System.out.println("Coordinate #"+i+": "+ coords[i]);
+            System.out.println("Coordinate # "+i+" : "+ coords[i]);
         }
-        System.out.println("");
     }
 
     /**
@@ -34,7 +33,10 @@ public class MultiPoint
     {
         return coords;
     }
-    
+
+    public double getXCoord(){return  coords[0];}
+    public double getYCoord(){return  coords[1];}
+
 
     @Override
     public  String toString() {
