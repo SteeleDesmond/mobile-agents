@@ -27,7 +27,7 @@ public class Map {
     }
 
     /**
-     *
+     * Initialize the map of node objects. Assign routing tables to nodes and set initial states
      */
     private void buildMap() {
         // Construct the nodes and add them to the nodes list
@@ -117,11 +117,27 @@ public class Map {
         return dc.isStarted();
     }
 
-    /**
-     * Used by Coordinator to spread the fire
-     */
-    public ArrayList<Node> getNodes() {
-        return nodes;
+    public void startFire() {
+        // If a node is near fire set it on fire
+        for(Node n : nodes) {
+            if(n.getNodeState().equals("near-fire")) {
+                n.setNodeState("fire");
+            }
+        }
+        // If a node is near a new fire set its state to near-fire
+        for(Node n : nodes) {
+            // If the node is fire look at its neighbors
+            if(n.getNodeState().equals("fire")) {
+                // If the node's neighbor isn't on fire already set it to near fire
+                for(Node neighbor : n.getRoutingTable().getNeighbors()) {
+                    if(!neighbor.getNodeState().equals("fire")) {
+                        neighbor.setNodeState("near-fire");
+                    }
+                }
+            }
+        }
+        // repaint the nodes
+        paintNodes();
     }
 
     /**
