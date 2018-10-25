@@ -19,10 +19,6 @@ public class Node implements NodeInterface {
     private static int nextId;
     private int nodeId;
 
-    // Used by the Station
-    public Node() {
-    }
-
     /**
      * Initialize routing table
      */

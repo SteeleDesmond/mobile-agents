@@ -19,7 +19,7 @@ public class Coordinator {
      */
     public void update() {
 
-        // Spread the fire
+        // If the start button is clicked start the fire
         if(map.isStarted()) {
             map.startFire();
         }

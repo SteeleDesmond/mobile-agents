@@ -20,10 +20,8 @@ public class Map {
     public Map(Configuration config, DisplayController dc) {
         this.dc = dc;
         this.config = config;
-        // Initialize the map of node objects
-        buildMap();
-        // Initialize the display
-        dc.displayMap(nodes, config.getEdges());
+        buildMap(); // Initialize the map of node objects
+        dc.displayMap(nodes, config.getEdges()); // Initialize the display
     }
 
     /**
@@ -34,7 +32,7 @@ public class Map {
         for (Point p : config.getNodes()) {
             // If it is the base station
             if(p.getX() == config.getStation().get(0).getX() && p.getY() == config.getStation().get(0).getY()) {
-                nodes.add(new Node((int) p.getX(), (int) p.getY(), "station"));
+                nodes.add(new Station((int) p.getX(), (int) p.getY(), "station"));
             }
             // If it is the fire starting node
             else if (p.getX() == config.getFireStart().get(0).getX() && p.getY() == config.getFireStart().get(0).getY()) {
@@ -58,7 +56,6 @@ public class Map {
             if (n.getNodeState().equals("fire")) {
                 for (Node neighbors : n.getRoutingTable().getNeighbors()) {
                     neighbors.setNodeState("near-fire");
-                    //dc.paintNode(neighbors);
                 }
             }
         }
