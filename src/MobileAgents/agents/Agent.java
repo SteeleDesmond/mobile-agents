@@ -18,10 +18,8 @@ public class Agent extends Thread {
     public Agent(int id, Node p) {
         currentNode = p;
         agentID = id;
-
         xpos = p.getXPos();
         ypos = p.getYPos();
-
     }
 
     /**
@@ -30,10 +28,8 @@ public class Agent extends Thread {
     @Override
     public void run() {
         try {
-            while(isSearching)
-            {
-                if(currentNode.getRoutingTable() != null)
-                {
+            while(isSearching) {
+                if(currentNode.getRoutingTable() != null) {
                     randonWalk();
                 }
                 Thread.sleep(1000);
@@ -44,20 +40,15 @@ public class Agent extends Thread {
         }
     }
 
-
     /**
      *  Picks a random node from a list of neighbors, and updates the agents current node to the random node
      */
-    public void randonWalk()
-    {
+    public void randonWalk() {
 
         MultiPoint random_point;
-
         ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
-
         boolean foundSpace = false;
         boolean noSpace = false;
-
         int counter = 0;
 
         //lets shuffle our list of nodes so we choose from random nodes
@@ -66,60 +57,34 @@ public class Agent extends Thread {
         // this will continue until 1 of 2 cases are met
         // 1. The agent has found an unoccupied node
         // 2. All the nodes in the given in the list are occupied
-        while(!foundSpace && !noSpace)
-        {
+        while(!foundSpace && !noSpace) {
             //grab a random node from the list
             Node random_node = neighbors.get(counter);
 
             //check if the node is occupied
-            if(!random_node.getIsOccupied())
-            {
+            if(!random_node.hasAgent()) {
                 //store the random nodes point
                 random_point = new MultiPoint(random_node.getXPos(),random_node.getYPos());
 
                 currentNode = random_node;
                 //case 1 has been met, exit the loop
                 foundSpace = true;
-
             }
             // the node is occupied check the next neighbor
-            else if(random_node.getIsOccupied())
-            {
+            else if(random_node.hasAgent()) {
                 //continue checking for an empty space
                 counter++;
 
                 // case 2  has been been met all the nodes are occupied
-                if(counter > neighbors.size())
-                {
+                if(counter > neighbors.size()) {
                     noSpace = true;
                 }
             }
-
         }
-
-    }
-
-    /**
-     *
-     * print the current x and y position of the agent
-     */
-    public void printAgentsPosition()
-    {
-      currentNode.getNodePos().printCoords();
-    }
-
-    public int getXpos()
-    {
-        return  xpos;
-    }
-    public int getYpos()
-    {
-        return  ypos;
     }
 
     @Override
-    public String toString()
-    {
-        return currentNode.getNodePos().toString();
+    public String toString() {
+        return currentNode.toString();
     }
 }

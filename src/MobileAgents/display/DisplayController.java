@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class DisplayController {
@@ -27,7 +26,7 @@ public class DisplayController {
      */
     public void displayMap(ArrayList<Node> nodes, ArrayList<MultiPoint> edges) {
 
-        int startX = 75; //
+        int startX = 75;
         int startY = 75;
         // Display the nodes
         for(Node n : nodes) {
@@ -38,16 +37,14 @@ public class DisplayController {
         }
 
         // Display the edges between nodes
-        for (MultiPoint p : edges)
-        {
-            double x1 = p.getCoords()[0];
-            double y1 = p.getCoords()[1];
-            double x2 = p.getCoords()[2];
-            double y2 = p.getCoords()[3];
+        for (MultiPoint p : edges) {
+            double x1 = p.getCoordinates()[0];
+            double y1 = p.getCoordinates()[1];
+            double x2 = p.getCoordinates()[2];
+            double y2 = p.getCoordinates()[3];
 
             Line line = new Line( startX * x1, startY * y1, startX * x2, startY * y2);
             edgePane.getChildren().add(line);
-
         }
     }
 
@@ -56,40 +53,45 @@ public class DisplayController {
      * @param node Node to paint
      */
     public void paintNode(Node node) {
+
         Circle nodeToChange = new Circle();
 
         for(Circle c : nodeCircles) {
             if(c.getCenterX() == node.getXPos()*75 && c.getCenterY() == node.getYPos() * 75) {
                 nodeToChange = c;
-
             }
         }
 
-
-
-        // Paint standard node color
-        if(node.getNodeState().equals("standard")) {
-            nodeToChange.setFill(Color.DODGERBLUE);
-        }
-        else if(node.getNodeState().equals("near-fire")) {
-            nodeToChange.setFill(Color.ORANGE);
-        }
-        // Paint fire color
-        else if(node.getNodeState().equals("fire")) {
-            nodeToChange.setFill(Color.ORANGERED);
-        }
-        //Paint agent color, only used for testing
-        else if(node.getNodeState().equals("agent"))
-        {
-            nodeToChange.setFill(Color.BLACK);
-
-        }
-        // Paint station color
-        else {
-            nodeToChange.setFill(Color.GREEN);
+        // If the node has an agent on it paint a ring on the node to indicate
+        if(node.hasAgent()) {
+            // If the agent is watching a fire paint it light green
+            if(node.getNodeState().equals("near-fire")) {
+                nodeToChange.setStroke(Color.LIGHTGREEN);
+            }
+            // Else paint the node with an agent light blue
+            else {
+                nodeToChange.setStroke(Color.LIGHTBLUE);
+            }
         }
 
-
+        switch(node.getNodeState()) {
+            // Paint standard node color
+            case "standard":
+                nodeToChange.setFill(Color.DODGERBLUE);
+                break;
+            // Paint station color
+            case "station":
+                nodeToChange.setFill(Color.GREEN);
+                break;
+            // Paint near-fire color
+            case "near-fire":
+                nodeToChange.setFill(Color.ORANGE);
+                break;
+            // Paint fire color
+            case "fire":
+                nodeToChange.setFill(Color.ORANGERED);
+                break;
+        }
     }
 
     /**
@@ -102,7 +104,6 @@ public class DisplayController {
      * Update the base station's routing table
      */
     public void updateTable() {
-
     }
 
     @FXML

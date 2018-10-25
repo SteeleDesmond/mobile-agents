@@ -16,12 +16,9 @@ import java.util.List;
 public class Configuration {
 
     private ArrayList<Point> nodes = new ArrayList<>();
-
     private ArrayList<MultiPoint> edges = new ArrayList<>();
-
     private ArrayList<Point> station = new ArrayList<>();
     private ArrayList<Point> fireStart = new ArrayList<>();
-    private ArrayList<Point> routingTables = new ArrayList<>();
 
     public Configuration(String filePath) {
         parseConfigList(readFileInList(filePath));
@@ -51,10 +48,7 @@ public class Configuration {
     private void parseConfigList(List configList) {
         for (int i = 0; i < configList.size(); i++) {
 
-            int x1;
-            int x2;
-            int y1;
-            int y2;
+            int x1, y1, x2, y2;
 
             // grab the next element in the configuration list
             String currElement = configList.get(i).toString();
@@ -66,8 +60,7 @@ public class Configuration {
                 nodes.add(new Point(x1, y1));
             }
             //check for an edge
-            if (currElement.toLowerCase().startsWith("edge"))
-            {
+            if (currElement.toLowerCase().startsWith("edge")) {
                 // Add the starting edgeStarts location
                 x1 = Character.getNumericValue(currElement.charAt(5));
                 y1 = Character.getNumericValue(currElement.charAt(7));
@@ -99,7 +92,9 @@ public class Configuration {
         return nodes;
     }
 
-    public ArrayList<MultiPoint> getEdges() {return edges;}
+    public ArrayList<MultiPoint> getEdges() {
+        return edges;
+    }
 
     public ArrayList<Point> getStation() {
         return station;

@@ -16,8 +16,4 @@ public class RoutingTable {
     public void add(Node n) {
         neighbors.add(n);
     }
-
-    public void addAll() {
-
-    }
 }

@@ -11,25 +11,24 @@ public class Coordinator {
 
     private Map map;
 
-    public Coordinator(Configuration config)
-    {
+    public Coordinator(Configuration config) {
        map = new Map(config, MainApp.getDisplayController());
     }
 
     /**
-     * Called continuously by MainApp
+     * Called continuously by MainApp. Spreads the nodes' fires to its neighbors and updates display.
      */
     public void update() {
 
         // Spread the fire
-        if(map.isStart()) {
-            // If it's near fire set it on fire
+        if(map.isStarted()) {
+            // If a node is near fire set it on fire
             for(Node n : map.getNodes()) {
                 if(n.getNodeState().equals("near-fire")) {
                     n.setNodeState("fire");
                 }
             }
-            // If it's near a new fire set its state to near-fire
+            // If a node is near a new fire set its state to near-fire
             for(Node n : map.getNodes()) {
                 // If the node is fire look at its neighbors
                 if(n.getNodeState().equals("fire")) {
@@ -42,7 +41,7 @@ public class Coordinator {
                 }
             }
             // repaint the nodes
-            map.checkNodeStates();
+            map.paintNodes();
         }
     }
 

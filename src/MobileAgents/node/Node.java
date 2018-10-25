@@ -4,7 +4,6 @@ import MobileAgents.config.MultiPoint;
 import javafx.scene.shape.*;
 import java.awt.*;
 /**
- * Contains fire properties --
  * Holds different states --> Represented via State string. States are: "standard", "station", "fire", "near-fire"
  * State strings must be exact
  */
@@ -13,15 +12,14 @@ public class Node implements NodeInterface {
     private RoutingTable rt;
     private int xPos;
     private int yPos;
-    private MultiPoint nodePos;
     private String state;
-
-    private Boolean isOccupied = false;
+    private Boolean hasAgent;
 
     // We may need to implement a different way of tagging the nodes later. This method is from Roman's slides
     private static int nextId;
     private int nodeId;
 
+    // Used by the Station
     public Node() {
     }
 
@@ -32,9 +30,13 @@ public class Node implements NodeInterface {
         this.state = state;
         xPos = x;
         yPos = y;
-        nodePos = new MultiPoint(xPos,yPos);
+        hasAgent = false;
         this.nodeId = nextId;
         nextId++;
+    }
+
+    public int getNodeId() {
+        return nodeId;
     }
 
     public int getXPos() {
@@ -45,24 +47,6 @@ public class Node implements NodeInterface {
         return yPos;
     }
 
-    public int getNodeId() {
-        return nodeId;
-    }
-
-    public String getNodeState() {
-        return state;
-    }
-
-    public MultiPoint getNodePos(){return nodePos; }
-
-    public Boolean getIsOccupied(){return isOccupied;}
-
-    public void setNodeState(String state) {
-        this.state = state;
-    }
-
-    public void setNodePos(MultiPoint p){nodePos = p;}
-
     public RoutingTable getRoutingTable() {
         return rt;
     }
@@ -71,16 +55,28 @@ public class Node implements NodeInterface {
         this.rt = rt;
     }
 
+    public Boolean hasAgent() {
+        return hasAgent;
+    }
+
+    public void setHasAgent(Boolean hasAgent) {
+        this.hasAgent = hasAgent;
+    }
+
+    public String getNodeState() {
+        return state;
+    }
+
+    public void setNodeState(String state) {
+        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "This nodes position is " + xPos + " " + yPos;
+    }
 
     @Override
     public void run() {
-
     }
-    @Override
-    public String toString()
-    {
-        return "This nodes current postion is " + nodePos.toString();
-    }
-
-
 }
