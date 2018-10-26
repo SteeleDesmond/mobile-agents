@@ -23,6 +23,8 @@ public class Map {
         this.config = config;
         buildMap(); // Initialize the map of node objects
         dc.displayMap(nodes, config.getEdges()); // Initialize the display
+        
+        nodes.get(9).sendMsg(new Message("Test message sent from Map constructor"));
     }
 
     /**
@@ -115,7 +117,7 @@ public class Map {
         return dc.isStarted();
     }
 
-    public void startFire() {
+    public void spreadFire() {
         // If a node is near fire set it on fire
         for(Node n : nodes) {
             if(n.getNodeState().equals("near-fire")) {
@@ -142,9 +144,6 @@ public class Map {
         for(Node n : nodes) {
             n.startNode();
         }
-        nodes.get(9).sendMsg(new Message("Test")); // giving a message to a node near fire (7,2)
-        nodes.get(9).sendMsg(new Message("Test1")); // giving a message to a node near fire (7,2)
-        nodes.get(9).sendMsg(new Message("Test2")); // giving a message to a node near fire (7,2)
     }
 
     /**

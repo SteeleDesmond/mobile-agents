@@ -67,14 +67,17 @@ public class DisplayController {
             // If the agent is watching a fire paint it light green
             if(node.getNodeState().equals("near-fire")) {
                 nodeToChange.setStroke(Color.LIGHTGREEN);
+                nodeToChange.setStrokeWidth(5);
             }
             // Else paint the node with an agent light blue
             else {
                 nodeToChange.setStroke(Color.LIGHTBLUE);
+                nodeToChange.setStrokeWidth(5);
             }
         }
         else if(!node.hasAgent()) {
             nodeToChange.setStroke(Color.BLACK);
+            nodeToChange.setStrokeWidth(1);
         }
 
         switch(node.getNodeState()) {

@@ -7,8 +7,10 @@ import javafx.scene.shape.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * Holds different states --> Represented via State string. States are: "standard", "station", "fire", "near-fire"
@@ -154,7 +156,16 @@ public class Node implements NodeInterface {
     public void run() {
         while(running) {
             try {
-                handleMessage(queue.take());
+                Message msg = queue.poll(100, TimeUnit.MILLISECONDS);
+                // If this Node received a message handle it
+                if(msg != null) {
+                    handleMessage(msg);
+                }
+                // If this Node has been set on fire kill this Node
+                if(getNodeState().equals("fire")) {
+                    running = false;
+                    System.out.println("node terminated");
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -162,15 +173,15 @@ public class Node implements NodeInterface {
     }
 
     /**
-     * Read a message's contents and determine how to handle it.
+     * Read a message's contents and determine how to handle it (where to send it).
      * @param msg the message given to the node
      * @throws InterruptedException
      */
     public void handleMessage(Message msg) throws InterruptedException {
         System.out.println("Message '" + msg.getMsg() + "' given to " + toString());
-
+        setHasAgent(true); // For testing the display only
         Node node = rt.getNeighbors().get(0);
-        sleep(1000);
+        sleep(1000); // for testing
         node.sendMsg(msg);
     }
 }
