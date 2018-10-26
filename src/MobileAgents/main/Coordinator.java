@@ -12,6 +12,7 @@ public class Coordinator {
 
     public Coordinator(Configuration config) {
        map = new Map(config, MainApp.getDisplayController());
+       map.startNodes();
     }
 
     /**
@@ -24,5 +25,4 @@ public class Coordinator {
             map.startFire();
         }
     }
-
 }

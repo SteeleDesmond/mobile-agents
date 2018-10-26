@@ -1,5 +1,6 @@
 package MobileAgents.display;
 
+import MobileAgents.agents.Message;
 import MobileAgents.config.Configuration;
 import MobileAgents.config.MultiPoint;
 import MobileAgents.node.Node;
@@ -135,6 +136,15 @@ public class Map {
         }
         // repaint the nodes
         paintNodes();
+    }
+
+    public void startNodes() {
+        for(Node n : nodes) {
+            n.startNode();
+        }
+        nodes.get(9).sendMsg(new Message("Test")); // giving a message to a node near fire (7,2)
+        nodes.get(9).sendMsg(new Message("Test1")); // giving a message to a node near fire (7,2)
+        nodes.get(9).sendMsg(new Message("Test2")); // giving a message to a node near fire (7,2)
     }
 
     /**

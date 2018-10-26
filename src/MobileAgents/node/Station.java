@@ -1,6 +1,7 @@
 package MobileAgents.node;
 
 import MobileAgents.agents.Agent;
+import MobileAgents.agents.Message;
 
 /**
  * The base station of the simulation map. It is initialized in the Map class and contained in the nodes array with
@@ -23,5 +24,10 @@ public class Station extends Node {
     private void initializeFirstAgent() {
         Agent agent = new Agent(1,this);
         //agents.add(agent);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        System.out.println("Base station received message");
     }
 }
