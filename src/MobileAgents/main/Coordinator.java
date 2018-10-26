@@ -1,6 +1,5 @@
 package MobileAgents.main;
 
-import MobileAgents.agents.Agent;
 import MobileAgents.config.Configuration;
 import MobileAgents.display.Map;
 
@@ -12,14 +11,18 @@ public class Coordinator {
     private Map map;
 
     public Coordinator(Configuration config) {
-        map = new Map(config, MainApp.getDisplayController());
+       map = new Map(config, MainApp.getDisplayController());
     }
 
     /**
-     * Called continuously by MainApp
+     * Called continuously by MainApp. Spreads the nodes' fires to its neighbors and updates display.
      */
     public void update() {
-//        agent1.start();
-//        sceneDisplayController.start();
+
+        // If the start button is clicked start the fire
+        if(map.isStarted()) {
+            map.startFire();
+        }
     }
+
 }

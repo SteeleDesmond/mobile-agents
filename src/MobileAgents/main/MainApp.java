@@ -1,8 +1,8 @@
 package MobileAgents.main;
 
 
-import MobileAgents.display.DisplayController;
 import MobileAgents.config.Configuration;
+import MobileAgents.display.DisplayController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -48,7 +48,7 @@ public class MainApp extends Application {
 
                 if(now > nextTime) {
                     coordinator.update();
-                    nextTime = now + Duration.ofMillis(1).toNanos();
+                    nextTime = now + Duration.ofSeconds(2).toNanos();
                 }
             }
         };
