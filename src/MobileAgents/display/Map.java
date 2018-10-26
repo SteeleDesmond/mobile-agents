@@ -59,7 +59,7 @@ public class Map {
                 }
             }
         }
-        printNodes();
+        //printNodes();
     }
 
     /**
@@ -142,10 +142,12 @@ public class Map {
      */
     public void printNodes() {
         for (Node n : nodes) {
-            System.out.println("Node " + n.getNodeId() + "(" + n.getNodeState() + "): = " + n.getXPos() + " " + n.getYPos());
+            System.out.println("Node " + n.getNodeId() + "(" + n.getNodeState() + "): = "
+                                       + n.getXPos() + " " + n.getYPos());
             System.out.println("Node's Neighbors:");
             for (Node node : n.getRoutingTable().getNeighbors()) {
-                System.out.println("Node Neighbor " + node.getNodeId() + "(" + node.getNodeState() + "): = " + node.getXPos() + " " + node.getYPos());
+                System.out.println("Node Neighbor " + node.getNodeId() + "(" + node.getNodeState()
+                                                    + "): = " + node.getXPos() + " " + node.getYPos());
             }
         }
     }

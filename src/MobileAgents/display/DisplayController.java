@@ -73,6 +73,9 @@ public class DisplayController {
                 nodeToChange.setStroke(Color.LIGHTBLUE);
             }
         }
+        else if(!node.hasAgent()) {
+            nodeToChange.setStroke(Color.BLACK);
+        }
 
         switch(node.getNodeState()) {
             // Paint standard node color
