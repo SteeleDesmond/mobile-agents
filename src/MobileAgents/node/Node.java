@@ -178,8 +178,8 @@ public class Node implements NodeInterface {
      * @throws InterruptedException
      */
     public void handleMessage(Message msg) throws InterruptedException {
-        System.out.println("Message '" + msg.getMsg() + "' given to " + toString());
-        setHasAgent(true); // For testing the display only
+        //System.out.println("Message '" + msg.getMsg() + "' given to " + toString());
+        //setHasAgent(true); // For testing the display only
         Node node = rt.getNeighbors().get(0);
         sleep(1000); // for testing
         node.sendMsg(msg);

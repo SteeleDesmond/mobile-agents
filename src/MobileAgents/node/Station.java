@@ -25,6 +25,7 @@ public class Station extends Node {
      */
     private void initializeFirstAgent() {
         Agent agent = new Agent(1,this);
+        agent.start();
         agents.add("Initial agent created");
         //agents.add(agent);
     }
@@ -32,11 +33,12 @@ public class Station extends Node {
     /**
      * The Station needs to handle messages differently compared to a regular Node.
      * @param msg the message given to the Station
+     *
      */
     @Override
     public void handleMessage(Message msg) {
         System.out.println("Base station received a message");
-        setHasAgent(true);
+       // setHasAgent(true);
         agents.add(msg.getMsg()); // Store the message given in the agents list for now
         System.out.println("--- Printing all messages received at base station ---");
         for(String s : agents) {

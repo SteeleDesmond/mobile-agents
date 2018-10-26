@@ -1,6 +1,5 @@
 package MobileAgents.agents;
 
-import MobileAgents.config.MultiPoint;
 import MobileAgents.node.Node;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -15,11 +14,11 @@ public class Agent extends Thread {
     public boolean isCloneable = false;
     public boolean isSearching = true; // true when the agent should perform random walk
 
-    public Agent(int id, Node p) {
-        currentNode = p;
+    public Agent(int id, Node node) {
+        currentNode = node;
         agentID = id;
-        xpos = p.getXPos();
-        ypos = p.getYPos();
+        xpos = node.getXPos();
+        ypos = node.getYPos();
     }
 
     /**
@@ -28,12 +27,33 @@ public class Agent extends Thread {
     @Override
     public void run() {
         try {
-            while(isSearching) {
-                if(currentNode.getRoutingTable() != null) {
+
+            while(isSearching)
+            {
+                if(currentNode.getRoutingTable() != null)
+                {
                     randonWalk();
+                    Thread.sleep(1000);
+                   if(checkForFire() == true)
+                   {
+                       isSearching = false;
+                       isCloneable = true;
+                   }
+
                 }
-                Thread.sleep(1000);
+
             }
+            //clone the agent
+            if(isCloneable == true)
+            {
+                System.out.println("cloning an agent...");
+                cloneAgent();
+
+                isCloneable = false;
+                isSearching = true;
+                //Thread.sleep(100);
+            }
+
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -45,7 +65,6 @@ public class Agent extends Thread {
      */
     public void randonWalk() {
 
-        MultiPoint random_point;
         ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
         boolean foundSpace = false;
         boolean noSpace = false;
@@ -57,16 +76,19 @@ public class Agent extends Thread {
         // this will continue until 1 of 2 cases are met
         // 1. The agent has found an unoccupied node
         // 2. All the nodes in the given in the list are occupied
-        while(!foundSpace && !noSpace) {
+        while(!foundSpace && !noSpace && counter < neighbors.size()) {
             //grab a random node from the list
             Node random_node = neighbors.get(counter);
 
             //check if the node is occupied
-            if(!random_node.hasAgent()) {
-                //store the random nodes point
-                random_point = new MultiPoint(random_node.getXPos(),random_node.getYPos());
-
+            if(!random_node.hasAgent())
+            {
+                //since the agent is moving nodes the previous node should no longer have an agent
+                currentNode.setHasAgent(false);
+                //set the agents current node to the new random
                 currentNode = random_node;
+                //updates agent current node
+                currentNode.setHasAgent(true);
                 //case 1 has been met, exit the loop
                 foundSpace = true;
             }
@@ -74,12 +96,58 @@ public class Agent extends Thread {
             else if(random_node.hasAgent()) {
                 //continue checking for an empty space
                 counter++;
-
                 // case 2  has been been met all the nodes are occupied
-                if(counter > neighbors.size()) {
+                if(counter == neighbors.size()) {
                     noSpace = true;
                 }
             }
+        }
+    }
+
+    /**
+     *
+     * @return true if a node is near a fire
+     */
+    public boolean checkForFire()
+    {
+        ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
+        boolean foundFire = false;
+
+        for(Node n : neighbors)
+        {
+            if(n.getNodeState() == "near-fire")
+            {
+               foundFire = true;
+               break;
+            }
+        }
+
+        return foundFire;
+    }
+
+    /**
+     *  Clones an agent on its neighbors nodes,which includes 'near-fire' nodes and 'standard' nodes
+     */
+    public void cloneAgent()
+    {
+        ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
+        int id;
+
+        for(Node n : neighbors)
+        {
+            if(n.getNodeState() == "near-fire" || n.getNodeState() == "standard")
+            {
+                // if the neighbor node doesnt have an agent
+                if(n.hasAgent() == false)
+                {
+                    id = agentID + 1;
+                    Agent agent_clone = new Agent(id,n);
+                    agent_clone.currentNode.setHasAgent(true);
+                    agent_clone.start();
+                }
+
+            }
+
         }
     }
 
@@ -87,4 +155,6 @@ public class Agent extends Thread {
     public String toString() {
         return currentNode.toString();
     }
+
+
 }
