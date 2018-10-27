@@ -4,15 +4,17 @@ import MobileAgents.node.Node;
 import java.util.Collections;
 import java.util.ArrayList;
 
+/**
+ *  Controls the Agents Functionality
+ */
 public class Agent extends Thread {
 
-    public Node currentNode; // agents current position
-    private int xpos;
-    private int ypos;
+    private Node currentNode; // the node the agent is currently on
+    private int xpos; // agents x position
+    private int ypos; // agents y position
     private int agentID;
 
-    public boolean isCloneable = false;
-    public boolean isSearching = true; // true when the agent should perform random walk
+    private boolean isSearching = true; // true when the agent should perform random walk
 
     public Agent(int id, Node node) {
         currentNode = node;
@@ -22,48 +24,32 @@ public class Agent extends Thread {
     }
 
     /**
-     *   Agents Thread
+     * Agents Thread
      */
     @Override
     public void run() {
         try {
 
-            while(isSearching)
-            {
-                if(currentNode.getRoutingTable() != null)
-                {
-                    randonWalk();
-                    Thread.sleep(1000);
-                   if(checkForFire() == true)
-                   {
-                       isSearching = false;
-                       isCloneable = true;
-                   }
-
+            while (getIsSearching()) {
+                if (currentNode.getRoutingTable() != null) {
+                    randomWalk();
                 }
-
+                Thread.sleep(1000);
             }
-            //clone the agent
-            if(isCloneable == true)
-            {
-                System.out.println("cloning an agent...");
-                cloneAgent();
-
-                isCloneable = false;
-                isSearching = true;
-                //Thread.sleep(100);
+            if (checkIfDie()) {
+                currentNode.terminate();
+                currentNode.setHasAgent(false);
             }
 
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     *  Picks a random node from a list of neighbors, and updates the agents current node to the random node
+     * Picks a random node from a list of neighbors, and updates the agents current node to the random node
      */
-    public void randonWalk() {
+    private synchronized void randomWalk() {
 
         ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
         boolean foundSpace = false;
@@ -76,28 +62,34 @@ public class Agent extends Thread {
         // this will continue until 1 of 2 cases are met
         // 1. The agent has found an unoccupied node
         // 2. All the nodes in the given in the list are occupied
-        while(!foundSpace && !noSpace && counter < neighbors.size()) {
+        while (!foundSpace && !noSpace && counter < neighbors.size()) {
             //grab a random node from the list
             Node random_node = neighbors.get(counter);
-
-            //check if the node is occupied
-            if(!random_node.hasAgent())
-            {
+            //check if the node is occupied and is not on fire
+            if (!random_node.hasAgent() && !random_node.getNodeState().equals("fire")) {
                 //since the agent is moving nodes the previous node should no longer have an agent
                 currentNode.setHasAgent(false);
+
                 //set the agents current node to the new random
-                currentNode = random_node;
+                setCurrentNode(random_node);
+
                 //updates agent current node
                 currentNode.setHasAgent(true);
-                //case 1 has been met, exit the loop
+
+                //lets check if theres a nearby fire, if there is clone the agent
+                if (checkForFire()) {
+                    cloneAgent();
+                }
+
+                //case 1 has been bet, exit the loop
                 foundSpace = true;
             }
             // the node is occupied check the next neighbor
-            else if(random_node.hasAgent()) {
+            else if (random_node.hasAgent()) {
                 //continue checking for an empty space
                 counter++;
                 // case 2  has been been met all the nodes are occupied
-                if(counter == neighbors.size()) {
+                if (counter > neighbors.size()) {
                     noSpace = true;
                 }
             }
@@ -105,20 +97,22 @@ public class Agent extends Thread {
     }
 
     /**
-     *
      * @return true if a node is near a fire
      */
-    public boolean checkForFire()
-    {
+    private boolean checkForFire() {
         ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
         boolean foundFire = false;
 
-        for(Node n : neighbors)
-        {
-            if(n.getNodeState() == "near-fire")
-            {
-               foundFire = true;
-               break;
+        for (Node n : neighbors) {
+            if (n.getNodeState().equals("near-fire")) {
+                foundFire = true;
+
+                // place the agent on the yellow node
+                setAgentXPos(n.getXPos());
+                setAgentYPos(n.getYPos());
+
+                n.setHasAgent(true);
+                break;
             }
         }
 
@@ -126,34 +120,102 @@ public class Agent extends Thread {
     }
 
     /**
-     *  Clones an agent on its neighbors nodes,which includes 'near-fire' nodes and 'standard' nodes
+     * Clones an agent on its neighbors nodes,which includes 'near-fire' nodes and 'standard' nodes
      */
-    public void cloneAgent()
-    {
+    private void cloneAgent() {
         ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
         int id;
 
-        for(Node n : neighbors)
-        {
-            if(n.getNodeState() == "near-fire" || n.getNodeState() == "standard")
-            {
-                // if the neighbor node doesnt have an agent
-                if(n.hasAgent() == false)
-                {
-                    id = agentID + 1;
-                    Agent agent_clone = new Agent(id,n);
-                    agent_clone.currentNode.setHasAgent(true);
+        for (Node n : neighbors) {
+            if (!n.hasAgent() && !n.getNodeState().equals("fire")) {
+                if (n.getNodeState().equals("near-fire") || n.getNodeState().equals("standard")) {
+                    id = this.agentID + 1;
+
+                    Agent agent_clone = new Agent(id, n);
+                    n.setHasAgent(true);
                     agent_clone.start();
+
+                    // the starting agents job is done, pause its thread
+                    try {
+                        this.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
 
             }
-
         }
     }
 
+    /**
+     * @return The node the agent is on
+     */
+    public Node getCurrentNode() {
+        return currentNode;
+    }
+
+    /**
+     * Set the node the agent is on
+     *
+     * @param node
+     */
+    private void setCurrentNode(Node node) {
+        currentNode = node;
+    }
+
+    /**
+     * @return if the agent is on a fire Node
+     */
+    private boolean checkIfDie() {
+        if (currentNode.getNodeState().equals("fire")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return true if the agent is performing an random walk
+     */
+    private boolean getIsSearching() {
+        return isSearching;
+    }
+
+    /**
+     * @return agents x positions
+     */
+    public int getAgentXPos() {
+        return xpos;
+    }
+
+    /**
+     * @return agents y position
+     */
+    public int getAgentYPos() {
+        return ypos;
+    }
+
+    /**
+     * Set the agents x position
+     *
+     * @param x
+     */
+    public void setAgentXPos(int x) {
+        xpos = x;
+    }
+
+    /**
+     * @param y
+     */
+    public void setAgentYPos(int y) {
+        xpos = y;
+    }
+
+
     @Override
     public String toString() {
-        return currentNode.toString();
+        return "Agent: " + agentID + " " + " Node " + currentNode;
     }
 
 

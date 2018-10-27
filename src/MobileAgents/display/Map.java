@@ -9,6 +9,7 @@ import MobileAgents.node.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+
 /**
  * Map used by the display object. Stores a list of nodePoints for the display
  */
@@ -117,29 +118,55 @@ public class Map {
         return dc.isStarted();
     }
 
-    public void spreadFire() {
+    /**
+     *  Spreads Fire to nodes
+     */
+    public void spreadFire()
+    {
+        startFire();
+        createNearFires();
+    }
+
+    /**
+     *  Sets yellow-nodes to the on 'fire' state
+     */
+    private void startFire() {
+
         // If a node is near fire set it on fire
-        for(Node n : nodes) {
-            if(n.getNodeState().equals("near-fire")) {
+        for (Node n : nodes) {
+            // set near fires to on fire
+            if (n.getNodeState().equals("near-fire")) {
                 n.setNodeState("fire");
+
             }
         }
+
+    }
+
+    /**
+     *   Sets nodes closest to the fires to the 'near-fire' state
+     */
+    private void createNearFires() {
+
         // If a node is near a new fire set its state to near-fire
-        for(Node n : nodes) {
-            // If the node is fire look at its neighbors
-            if(n.getNodeState().equals("fire")) {
-                // If the node's neighbor isn't on fire already set it to near fire
-                for(Node neighbor : n.getRoutingTable().getNeighbors()) {
-                    if(!neighbor.getNodeState().equals("fire")) {
+        for (Node n : nodes) {
+            // If the node is on fire look at its neighbors
+            if (n.getNodeState().equals("fire")) {
+
+                for (Node neighbor : n.getRoutingTable().getNeighbors()) {
+                    // If the node's neighbor isn't on fire already set it to near fire
+                    if (!neighbor.getNodeState().equals("fire")) {
                         neighbor.setNodeState("near-fire");
                     }
+
                 }
             }
         }
-        // repaint the nodes
-        paintNodes();
     }
 
+    /**
+     *
+     */
     public void startNodes() {
         for(Node n : nodes) {
             n.startNode();
@@ -160,4 +187,21 @@ public class Map {
             }
         }
     }
+
+    /**
+     *  Print the agents on the map to the console
+     */
+    public void printAgents()
+    {
+        for(Node n : nodes)
+        {
+
+            if(n.hasAgent())
+            {
+              System.out.println(n);
+            }
+        }
+    }
+
+
 }
