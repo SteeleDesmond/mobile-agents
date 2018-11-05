@@ -2,12 +2,7 @@ package MobileAgents.main;
 
 import MobileAgents.config.Configuration;
 import MobileAgents.display.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Instantiates and manage all threads
@@ -20,6 +15,7 @@ public class Coordinator extends Thread  {
        map = new Map(config, MainApp.getDisplayController());
        map.startNodes();
        this.start();
+
     }
 
     /**
