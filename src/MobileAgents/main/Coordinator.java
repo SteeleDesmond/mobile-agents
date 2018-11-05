@@ -10,11 +10,12 @@ import MobileAgents.display.Map;
 public class Coordinator extends Thread  {
 
     private Map map;
+    private boolean startFire;
 
     public Coordinator(Configuration config) {
        map = new Map(config, MainApp.getDisplayController());
        map.startNodes();
-       this.start();
+
 
     }
 
@@ -24,6 +25,13 @@ public class Coordinator extends Thread  {
     public void update()
     {
         map.paintNodes();
+
+        if(map.isStarted() && startFire == false)
+        {
+            this.start();
+            startFire = true;
+            System.out.println("Fire will start to spread in 5 seconds");
+        }
     }
 
     /**
