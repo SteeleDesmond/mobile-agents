@@ -30,7 +30,7 @@ public class Coordinator extends Thread  {
         {
             this.start();
             startFire = true;
-            System.out.println("Fire will start to spread in 5 seconds");
+            System.out.println("Fire will start to spread in 5 seconds and then every 10 seconds");
         }
     }
 
