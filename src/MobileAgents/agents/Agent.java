@@ -30,12 +30,20 @@ public class Agent extends Thread {
     public void run() {
         try {
 
-            while (getIsSearching()) {
-                if (currentNode.getRoutingTable() != null) {
-                    randomWalk();
+            while (getIsSearching())
+            {
+                if (currentNode.getRoutingTable() != null)
+                {
+                    // check if there are any nearby fires
+                   checkForFire();
+                   //randomly search for more fires
+                   randomWalk();
+
                 }
+                // slow down the random walk / cloning
                 Thread.sleep(1000);
             }
+            //after the agent walks to a node, check if its set on fire, if so, terminate it
             if (checkIfDie()) {
                 currentNode.terminate();
                 currentNode.setHasAgent(false);
@@ -59,6 +67,7 @@ public class Agent extends Thread {
         //lets shuffle our list of nodes so we choose from random nodes
         Collections.shuffle(neighbors);
 
+
         // this will continue until 1 of 2 cases are met
         // 1. The agent has found an unoccupied node
         // 2. All the nodes in the given in the list are occupied
@@ -76,13 +85,9 @@ public class Agent extends Thread {
                 //updates agent current node
                 currentNode.setHasAgent(true);
 
-                //lets check if theres a nearby fire, if there is clone the agent
-                if (checkForFire()) {
-                    cloneAgent();
-                }
-
                 //case 1 has been bet, exit the loop
                 foundSpace = true;
+
             }
             // the node is occupied check the next neighbor
             else if (random_node.hasAgent()) {
@@ -99,24 +104,24 @@ public class Agent extends Thread {
     /**
      * @return true if a node is near a fire
      */
-    private boolean checkForFire() {
+    private void checkForFire() {
         ArrayList<Node> neighbors = currentNode.getRoutingTable().getNeighbors();
-        boolean foundFire = false;
 
         for (Node n : neighbors) {
-            if (n.getNodeState().equals("near-fire")) {
-                foundFire = true;
+            if (n.getNodeState().equals("near-fire"))
+            {
 
                 // place the agent on the yellow node
                 setAgentXPos(n.getXPos());
                 setAgentYPos(n.getYPos());
-
                 n.setHasAgent(true);
-                break;
+
+                //clone the agent
+                cloneAgent();
+
             }
         }
 
-        return foundFire;
     }
 
     /**
@@ -127,6 +132,7 @@ public class Agent extends Thread {
         int id;
 
         for (Node n : neighbors) {
+
             if (!n.hasAgent() && !n.getNodeState().equals("fire")) {
                 if (n.getNodeState().equals("near-fire") || n.getNodeState().equals("standard")) {
                     id = this.agentID + 1;

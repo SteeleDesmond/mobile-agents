@@ -2,12 +2,7 @@ package MobileAgents.main;
 
 import MobileAgents.config.Configuration;
 import MobileAgents.display.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Instantiates and manage all threads
@@ -15,11 +10,13 @@ import java.util.concurrent.TimeUnit;
 public class Coordinator extends Thread  {
 
     private Map map;
+    private boolean startFire;
 
     public Coordinator(Configuration config) {
        map = new Map(config, MainApp.getDisplayController());
        map.startNodes();
-       this.start();
+
+
     }
 
     /**
@@ -28,6 +25,13 @@ public class Coordinator extends Thread  {
     public void update()
     {
         map.paintNodes();
+
+        if(map.isStarted() && startFire == false)
+        {
+            this.start();
+            startFire = true;
+            System.out.println("Fire will start to spread in 5 seconds and then every 10 seconds");
+        }
     }
 
     /**

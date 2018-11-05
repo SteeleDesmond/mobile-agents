@@ -69,6 +69,11 @@ public class DisplayController {
                 nodeToChange.setStroke(Color.LIGHTGREEN);
                 nodeToChange.setStrokeWidth(5);
             }
+            else if(node.getNodeState().equals("fire"))
+            {
+                nodeToChange.setStroke(Color.BLACK);
+                nodeToChange.setStrokeWidth(1);
+            }
             // Else paint the node with an agent light blue
             else {
                 nodeToChange.setStroke(Color.LIGHTBLUE);
