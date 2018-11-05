@@ -132,6 +132,8 @@ public class Agent extends Thread {
                     id = this.agentID + 1;
 
                     Agent agent_clone = new Agent(id, n);
+                    // Send new clone's information to the base station
+                    currentNode.sendMsg(new Message(id, n.getNodeId()));
                     n.setHasAgent(true);
                     agent_clone.start();
 

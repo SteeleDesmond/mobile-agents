@@ -5,13 +5,19 @@ package MobileAgents.agents;
  */
 public class Message {
 
-    String msg;
+    private int agentId;
+    private int nodeId;
 
-    public Message(String message) {
-        msg = message;
+    public Message(int agentId, int nodeId) {
+        this.agentId = agentId;
+        this.nodeId = nodeId;
     }
 
-    public String getMsg() {
-        return msg;
+    public int getAgentId() {
+        return agentId;
+    }
+
+    public int getNodeId() {
+        return nodeId;
     }
 }

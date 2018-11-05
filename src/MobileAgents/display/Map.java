@@ -25,7 +25,7 @@ public class Map {
         buildMap(); // Initialize the map of node objects
         dc.displayMap(nodes, config.getEdges()); // Initialize the display
         
-        nodes.get(9).sendMsg(new Message("Test message sent from Map constructor"));
+        //nodes.get(9).sendMsg(new Message("Test message sent from Map constructor"));
     }
 
     /**

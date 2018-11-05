@@ -39,7 +39,7 @@ public class Station extends Node {
     public void handleMessage(Message msg) {
         System.out.println("Base station received a message");
        // setHasAgent(true);
-        agents.add(msg.getMsg()); // Store the message given in the agents list for now
+        //agents.add(msg.getMsg()); // Store the message given in the agents list for now
         System.out.println("--- Printing all messages received at base station ---");
         for(String s : agents) {
             System.out.println("'" + s + "'");
