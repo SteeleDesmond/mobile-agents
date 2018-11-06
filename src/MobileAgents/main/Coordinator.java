@@ -3,61 +3,123 @@ package MobileAgents.main;
 import MobileAgents.config.Configuration;
 import MobileAgents.display.Map;
 
+import java.util.TimerTask;
+import java.util.Timer;
+
+import MobileAgents.agents.Agent;
 
 /**
  * Instantiates and manage all threads
  */
-public class Coordinator extends Thread  {
+public class Coordinator extends Thread {
 
     private Map map;
     private boolean startFire;
 
+    private Agent agent;
+
+    private int fireSpreadTimer = 10000; // ms
+
+    public boolean done = false;
+
+
     public Coordinator(Configuration config) {
-       map = new Map(config, MainApp.getDisplayController());
-       map.startNodes();
-
-
+        map = new Map(config, MainApp.getDisplayController());
+        map.startNodes();
     }
 
     /**
      * Called continuously by MainApp. Updates display
      */
-    public void update()
-    {
+    public void update() {
+
         map.paintNodes();
 
-        if(map.isStarted() && startFire == false)
-        {
-            this.start();
-            startFire = true;
-            System.out.println("Fire will start to spread in 5 seconds and then every 10 seconds");
+        // checks if the start button has been processed
+        // startMap is called only one
+        if (map.isStarted() && !startFire) {
+            startMap();
+        }
+
+        //all the nodes are on fire, kill all the threads
+        if (map.isFinished()) {
+            // paint the remaining fire node
+            map.paintNodes();
+
+            //kill all the thread
+            killAll();
+        }
+
+    }
+
+    /**
+     * If the start button is clicked:
+     * 1. Countdown for the fire spread will start
+     * 2. Initialize 1 agent at the base station and start its thread
+     */
+    public void startMap() {
+
+        //start the fire thread
+        this.start();
+        startFire = true;
+
+        // initalize the agent at the base station and start its thread
+        agent = new Agent(0, map.getStationNode());
+        agent.start();
+
+        // help method that counts down the fire spreading
+        countDownFireStart();
+
+    }
+
+    /**
+     * Coordinators Thread, spreads fire every 10 seconds
+     */
+    @Override
+    public void run() {
+        try {
+            //execute threads functionailty
+            while (!done) {
+                //spread fire every 10 seconds
+                Thread.sleep(fireSpreadTimer);
+                map.spreadFire();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     *  Coordinators Thread, spreads fire every 10 seconds
+     * Simple function that prints out when the fire will start after the start button is pressed
      */
-    @Override
-    public void run() {
-        try
-        {
-            //give the agent some time to wander before fire starts
-            Thread.sleep(5000);
-            //execute threads functionailty
-            while(true)
-            {
-                //spread fire every 10 seconds
-                 Thread.sleep(10000);
-                 map.spreadFire();
+    public void countDownFireStart() {
+        final Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int i = Integer.parseInt(Integer.toString(fireSpreadTimer / 1000));
 
+            public void run() {
+                System.out.println("fire will start spreading in " + i--);
+                if (i < 0)
+                    timer.cancel();
             }
+        }, 0, 1000);
+    }
 
-
+    /**
+     * Terminate all running threads
+     */
+    public void killAll() {
+        // kill agents thread
+        agent.done = true;
+        //kill fire spreading thread
+        this.done = true;
+        //kill all the nodes threads
+        for (int i = 0; i < map.getAllNodes().size(); i++) {
+            map.getAllNodes().get(i).running = false;
         }
 
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Program is finished, all the nodes have been set on fire");
+
     }
 
 }

@@ -195,7 +195,6 @@ public class Map {
     {
         for(Node n : nodes)
         {
-
             if(n.hasAgent())
             {
               System.out.println(n);
@@ -203,5 +202,37 @@ public class Map {
         }
     }
 
+    /**
+     * @return The node with a state of "station"
+     */
+    public Node getStationNode() {
+        Node station = null;
+        for (Node n : nodes) {
+            if (n.getNodeState().equals("station")) {
+                station = n;
+            }
+        }
+        return station;
+    }
+
+    /**
+     * @return All the nodes in the map
+     */
+    public ArrayList<Node> getAllNodes() {
+        return nodes;
+    }
+
+    /**
+     * @return True if all the nodes in the map are on fire
+     */
+    public boolean isFinished() {
+        for (Node n : nodes) {
+            if (n.getNodeState() != "fire") {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 }
