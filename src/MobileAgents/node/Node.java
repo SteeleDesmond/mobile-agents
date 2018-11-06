@@ -6,6 +6,12 @@ import javafx.scene.shape.*;
 
 import java.awt.*;
 import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.sleep;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * Holds different states --> Represented via State string. States are: "standard", "station", "fire", "near-fire"
@@ -17,9 +23,10 @@ public class Node implements NodeInterface {
     private int yPos;
     private String state;
     private Boolean hasAgent;
-    private RoutingTable rt; // Contains list of neighbors
-    private LinkedList<Message> queue = new LinkedList<>(); // Queue of messages given to the Node
-
+    private RoutingTable rt; // Contains list of neighboring Nodes
+    private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>(10000000); // Queue of messages given to the Node
+    private Thread thread;
+    private boolean running;
     // Give each Node a unique ID
     private static int nextId;
     private int nodeId;
@@ -28,12 +35,13 @@ public class Node implements NodeInterface {
      * Initialize routing table
      */
     public Node(int x, int y, String state) {
-        this.state = state;
+        setNodeState(state);
         xPos = x;
         yPos = y;
         hasAgent = false;
         this.nodeId = nextId;
         nextId++;
+        thread = new Thread(this);
     }
 
     /**
@@ -92,22 +100,101 @@ public class Node implements NodeInterface {
         this.hasAgent = hasAgent;
     }
 
-
+    /**
+     * Get the current state of the node. Possible States are: "standard", "station", "fire", "near-fire"
+     * @return a possible state
+     */
     public String getNodeState() {
         return state;
     }
 
+    /**
+     * Set the current state of the node. Possible States are: "standard", "station", "fire", "near-fire"
+     * @param state the state to assign the Node
+     */
     public void setNodeState(String state) {
+        if(!(state.equals("standard") || state.equals("station") || state.equals("fire") || state.equals("near-fire"))) {
+            System.out.println("Error setting Node state for Node " + nodeId + " Please check spelling");
+            return;
+        }
         this.state = state;
     }
 
+    /**
+     * toString override will print the Node's position
+     * @return a String representing the Node and its position
+     */
     @Override
     public String toString() {
-        return "This nodes position is " + xPos + " " + yPos;
+        return "Node " + nodeId + ": " + xPos + " " + yPos;
     }
 
+    /**
+     * Start the Node's thread
+     */
+    public void startNode() {
+        running = true;
+        thread.start();
+    }
+
+    /**
+     * Stop the Node's actions
+     */
+    public void terminate() {
+        running = false;
+    }
+
+    public void sendMsg(Message msg) {
+        queue.add(msg);
+        //System.out.println(msg.getMsg());
+    }
+
+    /**
+     * Implementation of the Runnable interface from the NodeInterface class.
+     * The thread waits to receive a message from the queue. When a message is received it is sent to handleMessage().
+     */
     @Override
     public void run() {
-        System.out.println("test");
+        while(running) {
+            try {
+                Message msg = queue.poll(1, TimeUnit.MILLISECONDS);
+                // If this Node received a message handle it
+                if(msg != null) {
+                    handleMessage(msg);
+                }
+                // If this Node has been set on fire kill this Node
+                if(getNodeState().equals("fire")) {
+                    running = false;
+                    //System.out.println("node terminated");
+                    msg = queue.poll(100, TimeUnit.MILLISECONDS);
+                    if(msg != null) {
+                        System.out.println("Message lost at node " + nodeId);
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Read a message's contents and determine how to handle it (where to send it).
+     * @param msg the message given to the node
+     * @throws InterruptedException
+     */
+    public void handleMessage(Message msg) throws InterruptedException {
+        //setHasAgent(true); // For testing the display only
+        //sleep(1000); // for testing
+
+        int randomNeighbor = ThreadLocalRandom.current().nextInt(rt.getNeighbors().size());
+        Node n = rt.getNeighbors().get(randomNeighbor);
+
+        // If the randomly chosen neighbor is on fire then select a different neighbor
+        while(n.getNodeState().equals("fire")) {
+            randomNeighbor = ThreadLocalRandom.current().nextInt(rt.getNeighbors().size());
+            n = rt.getNeighbors().get(randomNeighbor);
+        }
+        n.sendMsg(msg);
+
     }
 }

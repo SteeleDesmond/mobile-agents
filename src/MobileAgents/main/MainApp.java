@@ -19,7 +19,7 @@ import java.time.Duration;
 public class MainApp extends Application {
 
     private static DisplayController dc = new DisplayController();
-    private Configuration map_config = new Configuration("./docs/sample.txt");
+    private Configuration map_config = new Configuration("./docs/sample-flipped.txt");
     private Coordinator coordinator;
 
     @Override
@@ -48,8 +48,12 @@ public class MainApp extends Application {
 
                 if(now > nextTime) {
                     coordinator.update();
-                    nextTime = now + Duration.ofSeconds(2).toNanos();
+                    nextTime = now + Duration.ofSeconds(1).toMillis();
+                    if (coordinator.isDone()) {
+                        coordinator.killAll();
+                    }
                 }
+
             }
         };
         a.start();

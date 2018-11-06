@@ -1,5 +1,6 @@
 package MobileAgents.display;
 
+import MobileAgents.agents.Message;
 import MobileAgents.config.Configuration;
 import MobileAgents.config.MultiPoint;
 import MobileAgents.node.Node;
@@ -7,6 +8,7 @@ import MobileAgents.node.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+
 
 /**
  * Map used by the display object. Stores a list of nodePoints for the display
@@ -16,12 +18,15 @@ public class Map {
     private DisplayController dc;
     private Configuration config;
     private ArrayList<Node> nodes = new ArrayList<>(); // Nodes in the map
+    private Station station;
 
     public Map(Configuration config, DisplayController dc) {
         this.dc = dc;
         this.config = config;
         buildMap(); // Initialize the map of node objects
         dc.displayMap(nodes, config.getEdges()); // Initialize the display
+        
+        //nodes.get(9).sendMsg(new Message("Test message sent from Map constructor"));
     }
 
     /**
@@ -32,7 +37,8 @@ public class Map {
         for (Point p : config.getNodes()) {
             // If it is the base station
             if(p.getX() == config.getStation().get(0).getX() && p.getY() == config.getStation().get(0).getY()) {
-                nodes.add(new Station((int) p.getX(), (int) p.getY(), "station"));
+                station = new Station((int) p.getX(), (int) p.getY(), "station");
+                nodes.add(station);
             }
             // If it is the fire starting node
             else if (p.getX() == config.getFireStart().get(0).getX() && p.getY() == config.getFireStart().get(0).getY()) {
@@ -100,41 +106,80 @@ public class Map {
         return neighbors;
     }
 
+    public void paintMap() {
+        paintNodes();
+        paintAgentTable();
+    }
+
     /**
      * Loop over the list of nodes and check if their state has changed. If it has, tell the display to paint the node
      */
-    public void paintNodes()
-    {
+    private void paintNodes() {
         for(Node n : nodes) {
             dc.paintNode(n);
         }
+    }
+
+    private void paintAgentTable() {
+        dc.updateTable(station.getAgentsList());
     }
 
     public boolean isStarted() {
         return dc.isStarted();
     }
 
-    public void startFire() {
+    /**
+     *  Spreads Fire to nodes
+     */
+    public void spreadFire() {
+        startFire();
+        createNearFires();
+    }
+
+    /**
+     *  Sets yellow-nodes to the on 'fire' state
+     */
+    private void startFire() {
+
         // If a node is near fire set it on fire
-        for(Node n : nodes) {
-            if(n.getNodeState().equals("near-fire")) {
+        for (Node n : nodes) {
+            // set near fires to on fire
+            if (n.getNodeState().equals("near-fire")) {
                 n.setNodeState("fire");
+
             }
         }
+
+    }
+
+    /**
+     *   Sets nodes closest to the fires to the 'near-fire' state
+     */
+    private void createNearFires() {
+
         // If a node is near a new fire set its state to near-fire
-        for(Node n : nodes) {
-            // If the node is fire look at its neighbors
-            if(n.getNodeState().equals("fire")) {
-                // If the node's neighbor isn't on fire already set it to near fire
-                for(Node neighbor : n.getRoutingTable().getNeighbors()) {
-                    if(!neighbor.getNodeState().equals("fire")) {
+        for (Node n : nodes) {
+            // If the node is on fire look at its neighbors
+            if (n.getNodeState().equals("fire")) {
+
+                for (Node neighbor : n.getRoutingTable().getNeighbors()) {
+                    // If the node's neighbor isn't on fire already set it to near fire
+                    if (!neighbor.getNodeState().equals("fire")) {
                         neighbor.setNodeState("near-fire");
                     }
+
                 }
             }
         }
-        // repaint the nodes
-        paintNodes();
+    }
+
+    /**
+     *
+     */
+    public void startNodes() {
+        for(Node n : nodes) {
+            n.startNode();
+        }
     }
 
     /**
@@ -151,4 +196,45 @@ public class Map {
             }
         }
     }
+
+    /**
+     *  Print the agents on the map to the console
+     */
+    public void printAgents()
+    {
+        for(Node n : nodes)
+        {
+            if(n.hasAgent())
+            {
+              System.out.println(n);
+            }
+        }
+    }
+
+    /**
+     * @return The node with a state of "station"
+     */
+    public Station getStationNode() {
+        return station;
+    }
+
+    /**
+     * @return All the nodes in the map
+     */
+    public ArrayList<Node> getAllNodes() {
+        return nodes;
+    }
+
+    /**
+     * @return True if all the nodes in the map are on fire
+     */
+    public boolean isFinished() {
+        for (Node n : nodes) {
+            if (n.getNodeState() != "fire") {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

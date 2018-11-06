@@ -1,12 +1,20 @@
 package MobileAgents.display;
 
+import MobileAgents.agents.Message;
 import MobileAgents.config.MultiPoint;
 import MobileAgents.node.Node;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -14,8 +22,12 @@ public class DisplayController {
     /** Graphics Components **/
     @FXML private Pane nodePane;
     @FXML private Pane edgePane;
+    @FXML private TableView table;
+    private TableColumn agentId = new TableColumn("Agent Id");
+    private TableColumn agentCreatedAt = new TableColumn("Created At");
     private boolean started;
     private ArrayList<Circle> nodeCircles = new ArrayList<>();
+
 
     /**
      * Display the initial map of nodes and edges. The FXML file contains a StackPane with the nodePane on
@@ -33,6 +45,11 @@ public class DisplayController {
             Circle node = new Circle(n.getXPos()*startX, n.getYPos()*startY, 10);
             nodeCircles.add(node);
             nodePane.getChildren().add(node);
+
+            // For testing purposes
+            String nodeId = String.valueOf(n.getNodeId());
+            nodePane.getChildren().add(new Text(n.getXPos()*startX, n.getYPos()*startY, nodeId));
+
             paintNode(n);
         }
 
@@ -46,6 +63,7 @@ public class DisplayController {
             Line line = new Line( startX * x1, startY * y1, startX * x2, startY * y2);
             edgePane.getChildren().add(line);
         }
+        displayTable();
     }
 
     /**
@@ -67,14 +85,22 @@ public class DisplayController {
             // If the agent is watching a fire paint it light green
             if(node.getNodeState().equals("near-fire")) {
                 nodeToChange.setStroke(Color.LIGHTGREEN);
+                nodeToChange.setStrokeWidth(5);
+            }
+            else if(node.getNodeState().equals("fire"))
+            {
+                nodeToChange.setStroke(Color.BLACK);
+                nodeToChange.setStrokeWidth(1);
             }
             // Else paint the node with an agent light blue
             else {
                 nodeToChange.setStroke(Color.LIGHTBLUE);
+                nodeToChange.setStrokeWidth(5);
             }
         }
         else if(!node.hasAgent()) {
             nodeToChange.setStroke(Color.BLACK);
+            nodeToChange.setStrokeWidth(1);
         }
 
         switch(node.getNodeState()) {
@@ -98,15 +124,20 @@ public class DisplayController {
     }
 
     /**
-     * Display the base station's routing table
+     * Add cell properties to the table columns and add the columns to the table. The TableView table object is created
+     * in the fxml file.
      */
     public void displayTable() {
+        table.getColumns().addAll(agentId, agentCreatedAt);
+        agentId.setCellValueFactory(new PropertyValueFactory<Message, String>("id"));
+        agentCreatedAt.setCellValueFactory(new PropertyValueFactory<Message,String>("location"));
     }
 
     /**
-     * Update the base station's routing table
+     * Update the base station's table of agents
      */
-    public void updateTable() {
+    public void updateTable(ObservableList<Message> agentsList) {
+        table.setItems(agentsList);
     }
 
     @FXML

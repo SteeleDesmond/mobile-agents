@@ -1,6 +1,12 @@
 package MobileAgents.node;
 
 import MobileAgents.agents.Agent;
+import MobileAgents.agents.Message;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * The base station of the simulation map. It is initialized in the Map class and contained in the nodes array with
@@ -10,18 +16,39 @@ import MobileAgents.agents.Agent;
 public class Station extends Node {
 
     private RoutingTable neighbors = super.getRoutingTable();
-    private RoutingTable agents = new RoutingTable();
+    private ObservableList<Message> agentsList = FXCollections.observableArrayList();
 
     public Station(int x, int y, String state) {
         super(x, y, state);
-        initializeFirstAgent();
+    }
+
+    public ObservableList<Message> getAgentsList() {
+        return agentsList;
+    }
+
+    public void addInitialAgent() {
+        agentsList.add(new Message(0, getNodeId()));
     }
 
     /**
-     * Example
+     * The Station needs to handle messages differently compared to a regular Node.
+     * @param msg the message given to the Station
+     *
      */
-    private void initializeFirstAgent() {
-        Agent agent = new Agent(1,this);
-        //agents.add(agent);
+    @Override
+    public void handleMessage(Message msg) {
+
+        for(Message m : agentsList) {
+            if(m.getMessageId() == (msg.getMessageId())) {
+                return;
+            }
+        }
+        System.out.println("Message Received at Station -- " + msg.toString());
+        agentsList.add(msg);
+
+//        System.out.println("--- Printing all messages received at base station ---");
+//        for(Message m : agentsList) {
+//            System.out.println("'" + m.toString() + "'");
+//        }
     }
 }
