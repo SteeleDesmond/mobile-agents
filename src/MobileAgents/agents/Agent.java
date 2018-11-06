@@ -156,7 +156,9 @@ public class Agent extends Thread {
                     Agent clone_agent = new Agent(id, n);
 
                     // Send new clone's information to the base station
-                    currentNode.sendMsg(new Message(id, n.getNodeId()));
+                    Message msg = new Message(id, n.getNodeId());
+                    currentNode.sendMsg(msg);
+                    System.out.println("Message sent: " + msg.toString());
 
                     //let the node know if it has an agent on it
                     n.setHasAgent(true);

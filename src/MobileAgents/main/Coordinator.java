@@ -65,6 +65,7 @@ public class Coordinator extends Thread {
 
         // initialize the agent at the base station and start its thread
         agent = new Agent(0, map.getStationNode());
+        map.getStationNode().addInitialAgent();
         agent.start();
         System.out.println("Initial agent created at the base station");
 

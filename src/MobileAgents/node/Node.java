@@ -23,7 +23,7 @@ public class Node implements NodeInterface {
     private String state;
     private Boolean hasAgent;
     private RoutingTable rt; // Contains list of neighboring Nodes
-    private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>(100); // Queue of messages given to the Node
+    private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>(10000000); // Queue of messages given to the Node
     private Thread thread;
     private boolean running;
     // Give each Node a unique ID
@@ -156,7 +156,7 @@ public class Node implements NodeInterface {
     public void run() {
         while(running) {
             try {
-                Message msg = queue.poll(100, TimeUnit.MILLISECONDS);
+                Message msg = queue.poll(1, TimeUnit.MILLISECONDS);
                 // If this Node received a message handle it
                 if(msg != null) {
                     handleMessage(msg);
@@ -165,6 +165,10 @@ public class Node implements NodeInterface {
                 if(getNodeState().equals("fire")) {
                     running = false;
                     //System.out.println("node terminated");
+                    msg = queue.poll(100, TimeUnit.MILLISECONDS);
+                    if(msg != null) {
+                        System.out.println("Message lost at node " + nodeId);
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -178,11 +182,37 @@ public class Node implements NodeInterface {
      * @throws InterruptedException
      */
     public void handleMessage(Message msg) throws InterruptedException {
-        //System.out.println("Message '" + msg.getMsg() + "' given to " + toString());
         //setHasAgent(true); // For testing the display only
         //sleep(1000); // for testing
-        //System.out.println("test");
+
+        for(Node n : rt.getNeighbors()) {
+            if(n.getNodeState().equals("station")) {
+                n.sendMsg(msg);
+                return;
+            }
+        }
+        for(Node n : rt.getNeighbors()) {
+            if(n.getNodeState().equals("standard")) {
+                n.sendMsg(msg);
+                return;
+            }
+            if(n.getNodeState().equals("near-fire")) {
+                n.sendMsg(msg);
+                return;
+            }
+        }
+        System.out.println("Message " + msg.getMessageId() + " is stuck and can only go to fire");
         Node node = rt.getNeighbors().get(0);
         node.sendMsg(msg);
+
+//        // Flood all neighbors
+//        for(Node n : rt.getNeighbors()) {
+//            if(n.getNodeState().equals("station")) {
+//                n.sendMsg(msg);
+//                break;
+//            }
+//            else if (!n.getNodeState().equals("fire"))
+//            n.sendMsg(msg);
+//        }
     }
 }
