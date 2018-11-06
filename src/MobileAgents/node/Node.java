@@ -7,6 +7,7 @@ import javafx.scene.shape.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
@@ -185,34 +186,15 @@ public class Node implements NodeInterface {
         //setHasAgent(true); // For testing the display only
         //sleep(1000); // for testing
 
-        for(Node n : rt.getNeighbors()) {
-            if(n.getNodeState().equals("station")) {
-                n.sendMsg(msg);
-                return;
-            }
-        }
-        for(Node n : rt.getNeighbors()) {
-            if(n.getNodeState().equals("standard")) {
-                n.sendMsg(msg);
-                return;
-            }
-            if(n.getNodeState().equals("near-fire")) {
-                n.sendMsg(msg);
-                return;
-            }
-        }
-        System.out.println("Message " + msg.getMessageId() + " is stuck and can only go to fire");
-        Node node = rt.getNeighbors().get(0);
-        node.sendMsg(msg);
+        int randomNeighbor = ThreadLocalRandom.current().nextInt(rt.getNeighbors().size());
+        Node n = rt.getNeighbors().get(randomNeighbor);
 
-//        // Flood all neighbors
-//        for(Node n : rt.getNeighbors()) {
-//            if(n.getNodeState().equals("station")) {
-//                n.sendMsg(msg);
-//                break;
-//            }
-//            else if (!n.getNodeState().equals("fire"))
-//            n.sendMsg(msg);
-//        }
+        // If the randomly chosen neighbor is on fire then select a different neighbor
+        while(n.getNodeState().equals("fire")) {
+            randomNeighbor = ThreadLocalRandom.current().nextInt(rt.getNeighbors().size());
+            n = rt.getNeighbors().get(randomNeighbor);
+        }
+        n.sendMsg(msg);
+
     }
 }
