@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,11 @@ public class DisplayController {
             Circle node = new Circle(n.getXPos()*startX, n.getYPos()*startY, 10);
             nodeCircles.add(node);
             nodePane.getChildren().add(node);
+
+            // For testing purposes
+            String nodeId = String.valueOf(n.getNodeId());
+            nodePane.getChildren().add(new Text(n.getXPos()*startX, n.getYPos()*startY, nodeId));
+
             paintNode(n);
         }
 
