@@ -18,6 +18,7 @@ public class Map {
     private DisplayController dc;
     private Configuration config;
     private ArrayList<Node> nodes = new ArrayList<>(); // Nodes in the map
+    private Station station;
 
     public Map(Configuration config, DisplayController dc) {
         this.dc = dc;
@@ -36,7 +37,8 @@ public class Map {
         for (Point p : config.getNodes()) {
             // If it is the base station
             if(p.getX() == config.getStation().get(0).getX() && p.getY() == config.getStation().get(0).getY()) {
-                nodes.add(new Station((int) p.getX(), (int) p.getY(), "station"));
+                station = new Station((int) p.getX(), (int) p.getY(), "station");
+                nodes.add(station);
             }
             // If it is the fire starting node
             else if (p.getX() == config.getFireStart().get(0).getX() && p.getY() == config.getFireStart().get(0).getY()) {
@@ -104,14 +106,22 @@ public class Map {
         return neighbors;
     }
 
+    public void paintMap() {
+        paintNodes();
+        paintAgentTable();
+    }
+
     /**
      * Loop over the list of nodes and check if their state has changed. If it has, tell the display to paint the node
      */
-    public void paintNodes()
-    {
+    private void paintNodes() {
         for(Node n : nodes) {
             dc.paintNode(n);
         }
+    }
+
+    private void paintAgentTable() {
+        dc.updateTable(station.getAgentsList());
     }
 
     public boolean isStarted() {
@@ -121,8 +131,7 @@ public class Map {
     /**
      *  Spreads Fire to nodes
      */
-    public void spreadFire()
-    {
+    public void spreadFire() {
         startFire();
         createNearFires();
     }
@@ -205,13 +214,7 @@ public class Map {
     /**
      * @return The node with a state of "station"
      */
-    public Node getStationNode() {
-        Node station = null;
-        for (Node n : nodes) {
-            if (n.getNodeState().equals("station")) {
-                station = n;
-            }
-        }
+    public Station getStationNode() {
         return station;
     }
 
@@ -231,7 +234,6 @@ public class Map {
                 return false;
             }
         }
-
         return true;
     }
 

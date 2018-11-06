@@ -249,10 +249,6 @@ public class Agent extends Thread {
         return "Agent: " + agentID + " " + " Node " + currentNode;
     }
 
-    public boolean isDone() {
-        return done;
-    }
-
     public void setDone(boolean done) {
         this.done = done;
     }

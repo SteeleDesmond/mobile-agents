@@ -33,7 +33,7 @@ public class Coordinator extends Thread {
      */
     public void update() {
 
-        map.paintNodes();
+        map.paintMap();
 
         // checks if the start button has been processed
         // startMap is called only one
@@ -44,7 +44,7 @@ public class Coordinator extends Thread {
         //all the nodes are on fire, kill all the threads
         if (map.isFinished()) {
             // paint the remaining fire node
-            map.paintNodes();
+            map.paintMap();
 
             //kill all the thread
             killAll();
