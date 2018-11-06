@@ -25,7 +25,7 @@ public class Node implements NodeInterface {
     private RoutingTable rt; // Contains list of neighboring Nodes
     private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>(100); // Queue of messages given to the Node
     private Thread thread;
-    boolean running;
+    public boolean running;
     // Give each Node a unique ID
     private static int nextId;
     private int nodeId;

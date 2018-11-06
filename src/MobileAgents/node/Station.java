@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Station extends Node {
 
     private RoutingTable neighbors = super.getRoutingTable();
+
     private ArrayList<String> agents = new ArrayList<>();
 
     public Station(int x, int y, String state) {
@@ -23,9 +24,8 @@ public class Station extends Node {
     /**
      * Example
      */
-    private void initializeFirstAgent() {
-        Agent agent = new Agent(1,this);
-        agent.start();
+    public void initializeFirstAgent() {
+
         agents.add("Initial agent created");
         //agents.add(agent);
     }
