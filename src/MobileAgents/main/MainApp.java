@@ -19,7 +19,7 @@ import java.time.Duration;
 public class MainApp extends Application {
 
     private static DisplayController dc = new DisplayController();
-    private Configuration map_config = new Configuration("./docs/sample.txt");
+    private Configuration map_config = new Configuration("./docs/sample-flipped.txt");
     private Coordinator coordinator;
 
     @Override

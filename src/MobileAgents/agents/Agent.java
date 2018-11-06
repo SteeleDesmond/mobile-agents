@@ -59,7 +59,7 @@ public class Agent extends Thread {
 
                 }
                 // slow down the random walk / cloning
-                Thread.sleep(1000);
+                Thread.sleep(750);
             }
 
         } catch (InterruptedException e) {
