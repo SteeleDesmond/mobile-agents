@@ -49,7 +49,7 @@ public class MainApp extends Application {
                 if(now > nextTime) {
                     coordinator.update();
                     nextTime = now + Duration.ofSeconds(1).toMillis();
-                    if (coordinator.done) {
+                    if (coordinator.isDone()) {
                         coordinator.killAll();
                     }
                 }

@@ -13,21 +13,10 @@ import java.util.ArrayList;
 public class Station extends Node {
 
     private RoutingTable neighbors = super.getRoutingTable();
-
-    private ArrayList<String> agents = new ArrayList<>();
+    private ArrayList<Message> agentsList = new ArrayList<>();
 
     public Station(int x, int y, String state) {
         super(x, y, state);
-        initializeFirstAgent();
-    }
-
-    /**
-     * Example
-     */
-    public void initializeFirstAgent() {
-
-        agents.add("Initial agent created");
-        //agents.add(agent);
     }
 
     /**
@@ -37,12 +26,13 @@ public class Station extends Node {
      */
     @Override
     public void handleMessage(Message msg) {
-        System.out.println("Base station received a message");
-       // setHasAgent(true);
+        //System.out.println("Base station received a message");
+        //setHasAgent(true);
         //agents.add(msg.getMsg()); // Store the message given in the agents list for now
+        agentsList.add(msg);
         System.out.println("--- Printing all messages received at base station ---");
-        for(String s : agents) {
-            System.out.println("'" + s + "'");
+        for(Message m : agentsList) {
+            System.out.println("'" + m.toString() + "'");
         }
     }
 }

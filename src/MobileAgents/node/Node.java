@@ -25,7 +25,7 @@ public class Node implements NodeInterface {
     private RoutingTable rt; // Contains list of neighboring Nodes
     private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>(100); // Queue of messages given to the Node
     private Thread thread;
-    public boolean running;
+    private boolean running;
     // Give each Node a unique ID
     private static int nextId;
     private int nodeId;
@@ -164,7 +164,7 @@ public class Node implements NodeInterface {
                 // If this Node has been set on fire kill this Node
                 if(getNodeState().equals("fire")) {
                     running = false;
-                    System.out.println("node terminated");
+                    //System.out.println("node terminated");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -180,8 +180,9 @@ public class Node implements NodeInterface {
     public void handleMessage(Message msg) throws InterruptedException {
         //System.out.println("Message '" + msg.getMsg() + "' given to " + toString());
         //setHasAgent(true); // For testing the display only
+        //sleep(1000); // for testing
+        //System.out.println("test");
         Node node = rt.getNeighbors().get(0);
-        sleep(1000); // for testing
         node.sendMsg(msg);
     }
 }

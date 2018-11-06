@@ -20,4 +20,12 @@ public class Message {
     public int getNodeId() {
         return nodeId;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "agentId=" + agentId +
+                ", nodeId=" + nodeId +
+                '}';
+    }
 }
