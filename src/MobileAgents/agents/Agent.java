@@ -59,7 +59,7 @@ public class Agent extends Thread {
 
                 }
                 // slow down the random walk / cloning
-                Thread.sleep(1000);
+                Thread.sleep(750);
             }
 
         } catch (InterruptedException e) {
@@ -153,7 +153,7 @@ public class Agent extends Thread {
                 if (n.getNodeState().equals("near-fire") || n.getNodeState().equals("standard")) {
                     id = getAgentID() + 1;
 
-                    Agent clone_agent = new Agent(id, n);
+                    setAgentId(id);
 
                     // Send new clone's information to the base station
                     Message msg = new Message(id, n.getNodeId());
@@ -245,6 +245,12 @@ public class Agent extends Thread {
         return agentID;
     }
 
+    /**
+     * Set the Agents ID
+     */
+    public void setAgentId(int id) {
+        agentID = id;
+    }
 
     @Override
     public String toString() {
