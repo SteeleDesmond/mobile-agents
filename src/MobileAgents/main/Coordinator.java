@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import java.util.Timer;
 
 import MobileAgents.agents.Agent;
+import javafx.fxml.FXML;
 
 /**
  * Instantiates and manage all threads
@@ -50,7 +51,9 @@ public class Coordinator extends Thread {
             killAll();
         }
 
+
     }
+
 
     /**
      * If the start button is clicked:
@@ -124,7 +127,10 @@ public class Coordinator extends Thread {
         }
     }
 
+
     public boolean isDone() {
         return done;
     }
+
+
 }

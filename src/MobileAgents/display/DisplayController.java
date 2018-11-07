@@ -15,6 +15,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+import java.awt.event.ActionEvent;
+
+import javafx.event.*;
 
 import java.util.ArrayList;
 
@@ -26,7 +31,9 @@ public class DisplayController {
     private TableColumn agentId = new TableColumn("Agent Id");
     private TableColumn agentCreatedAt = new TableColumn("Created At");
     private boolean started;
+
     private ArrayList<Circle> nodeCircles = new ArrayList<>();
+
 
 
     /**
@@ -64,6 +71,8 @@ public class DisplayController {
             edgePane.getChildren().add(line);
         }
         displayTable();
+
+
     }
 
     /**
@@ -140,12 +149,16 @@ public class DisplayController {
         table.setItems(agentsList);
     }
 
+
     @FXML
     public void startButtonPressed() {
         started = true;
+
     }
 
     public boolean isStarted() {
         return started;
     }
+
+
 }
