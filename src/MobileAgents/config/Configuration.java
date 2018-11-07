@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.nio.file.Path;
-
 /**
  * Configuration reads a text file, parses the information read in from it, and supplies the info
  * to the Map class which will be used to generate the Mobile Agent Map.

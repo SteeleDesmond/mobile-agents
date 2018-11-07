@@ -38,7 +38,6 @@ public class MainApp extends Application {
 
         primaryStage.setScene(new Scene(rootPane));
         primaryStage.show();
-
         /*Initialize the coordinator with the given configuration*/
         coordinator = new Coordinator(map_config);
 
