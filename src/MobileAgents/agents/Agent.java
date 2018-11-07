@@ -147,12 +147,11 @@ public class Agent extends Thread {
         int id;
 
         for (Node n : neighbors) {
-            // if the neighbor node doesnt have an agent and isnt on fire, clone it
+            // if the neighbor node doesn't have an agent and isnt on fire, clone it
             if (!n.hasAgent() && !n.getNodeState().equals("fire")) {
                 //clone agents onto blue and yellow nodes
                 if (n.getNodeState().equals("near-fire") || n.getNodeState().equals("standard")) {
                     id = getAgentID() + 1;
-
                     setAgentId(id);
 
                     // Send new clone's information to the base station
@@ -257,7 +256,11 @@ public class Agent extends Thread {
         return "Agent: " + agentID + " " + " Node " + currentNode;
     }
 
+    /**
+     * @param done signals when to end the random walk
+     */
     public void setDone(boolean done) {
         this.done = done;
     }
+
 }

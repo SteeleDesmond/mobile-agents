@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.nio.file.Path;
 /**
  * Configuration reads a text file, parses the information read in from it, and supplies the info
  * to the Map class which will be used to generate the Mobile Agent Map.
@@ -32,8 +32,10 @@ public class Configuration {
     private List<String> readFileInList(String filePath) {
 
         List<String> lines = Collections.emptyList();
+        Path pathToFile = Paths.get(filePath);
+
         try {
-            lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
+            lines = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
         } catch (IOException e) {
             // do something
             e.printStackTrace();
