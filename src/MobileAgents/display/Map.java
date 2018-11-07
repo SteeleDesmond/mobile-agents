@@ -124,9 +124,7 @@ public class Map {
         dc.updateTable(station.getAgentsList());
     }
 
-    public boolean isStarted() {
-        return dc.isStarted();
-    }
+
 
     /**
      *  Spreads Fire to nodes
@@ -226,6 +224,13 @@ public class Map {
     }
 
     /**
+     * @return true if the start button is clicked
+     */
+    public boolean isStarted() {
+        return dc.isStarted();
+    }
+
+    /**
      * @return True if all the nodes in the map are on fire
      */
     public boolean isFinished() {
@@ -236,5 +241,7 @@ public class Map {
         }
         return true;
     }
+
+
 
 }
