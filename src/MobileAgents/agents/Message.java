@@ -3,7 +3,9 @@ package MobileAgents.agents;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
- * Used to deliver messages to and from the base station
+ * Used to deliver information to and from the base station. The class contains information about new agents being
+ * created on the map. Internally, it provides display properties about the agents so that the information can
+ * eventually be given to the display.
  */
 public class Message {
 

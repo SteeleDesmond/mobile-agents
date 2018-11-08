@@ -1,21 +1,16 @@
 package MobileAgents.node;
 
 import MobileAgents.agents.Message;
-import MobileAgents.config.MultiPoint;
-import javafx.scene.shape.*;
-
-import java.awt.*;
-import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.Thread.sleep;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 /**
  * Holds different states --> Represented via State string. States are: "standard", "station", "fire", "near-fire"
- * State strings must be exact
+ * State strings must be exact.
+ *
+ * Each node is a Runnable. Nodes contain useful information like their location, a unique id, a hasAgent boolean, a
+ * state, and a BlockingQueue for message passing.
  */
 public class Node implements NodeInterface {
 
@@ -24,7 +19,7 @@ public class Node implements NodeInterface {
     private String state;
     private Boolean hasAgent;
     private RoutingTable rt; // Contains list of neighboring Nodes
-    private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>(10000000); // Queue of messages given to the Node
+    private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>(10000); // Queue of messages
     private Thread thread;
     private boolean running;
     // Give each Node a unique ID
@@ -32,7 +27,7 @@ public class Node implements NodeInterface {
     private int nodeId;
 
     /**
-     * Initialize routing table
+     * Initialize the thread's values and start the Node
      */
     public Node(int x, int y, String state) {
         setNodeState(state);
@@ -195,6 +190,5 @@ public class Node implements NodeInterface {
             n = rt.getNeighbors().get(randomNeighbor);
         }
         n.sendMsg(msg);
-
     }
 }

@@ -10,50 +10,43 @@ import MobileAgents.agents.Agent;
 import javafx.fxml.FXML;
 
 /**
- * Instantiates and manage all threads
+ * Coordinator manages the simulation. Instantiates and manage all threads. It creates a map based on the given config
+ * file, manages the start button press and fire spreading countdown, and tells the map to check for changes to display.
  */
 public class Coordinator extends Thread {
 
     private Map map;
+    private Agent agent; // The initial agent created at the station
     private boolean startFire;
-
-    private Agent agent;
-
     private int fireSpreadTimer = 10000; // ms
-
     private boolean done = false;
 
-
+    /**
+     * On creation, generate the map and start the node threads.
+     * @param config the config file given. The config file path is assigned in MainApp.
+     */
     public Coordinator(Configuration config) {
         map = new Map(config, MainApp.getDisplayController());
         map.startNodes();
     }
 
     /**
-     * Called continuously by MainApp. Updates display
+     * Called continuously by MainApp. Updates the display and checks if the simulation is started or over.
      */
     public void update() {
 
         map.paintMap();
 
-        // checks if the start button has been processed
-        // startMap is called only one
+        // checks if the start button has been pressed
         if (map.isStarted() && !startFire) {
             startMap();
         }
-
-        //all the nodes are on fire, kill all the threads
+        // all the nodes are on fire so kill all the threads
         if (map.isFinished()) {
-            // paint the remaining fire node
-            map.paintMap();
-
-            //kill all the thread
+            map.paintMap(); // paint the remaining fire node
             killAll();
         }
-
-
     }
-
 
     /**
      * If the start button is clicked:
@@ -96,7 +89,7 @@ public class Coordinator extends Thread {
     /**
      * Simple function that prints out when the fire will start after the start button is pressed
      */
-    public void countDownFireStart() {
+    private void countDownFireStart() {
         final Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             int i = Integer.parseInt(Integer.toString(fireSpreadTimer / 1000));
@@ -116,21 +109,15 @@ public class Coordinator extends Thread {
         if(!done) {
             System.out.println("Program is finished, all the nodes have been set on fire");
         }
-
-        // kill agents thread
-        agent.setDone(true);
-        //kill fire spreading thread
-        this.done = true;
-        //kill all the nodes threads
+        agent.setDone(true); // kill agents thread
+        this.done = true; // kill fire spreading thread
+        //kill any remaining node threads (safety check -- they should already be finished)
         for (int i = 0; i < map.getAllNodes().size(); i++) {
             map.getAllNodes().get(i).terminate();
         }
     }
 
-
     public boolean isDone() {
         return done;
     }
-
-
 }

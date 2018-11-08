@@ -3,7 +3,8 @@ package MobileAgents.node;
 import java.util.ArrayList;
 
 /**
- * Used by Sensors to store its neighbors, used by Station to store a list of all agents
+ * Used by Nodes and the Station to store a list of its neighbors. Allows for additional functionality that we could
+ * decide to use later on.
  */
 public class RoutingTable {
 

@@ -5,11 +5,13 @@ package MobileAgents.config;
  *  edges since they are in the form of:
  *  edge 1 2 3 4
  */
-public class MultiPoint
-{
+public class MultiPoint {
     private double[] coords;
 
-    //construct an an array of n points
+    /**
+     * Construct an array of n points
+     * @param coordinates coordinates given
+     */
     public MultiPoint(double... coordinates){
         this.coords = coordinates;
     }

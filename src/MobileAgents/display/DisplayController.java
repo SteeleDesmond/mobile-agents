@@ -3,8 +3,6 @@ package MobileAgents.display;
 import MobileAgents.agents.Message;
 import MobileAgents.config.MultiPoint;
 import MobileAgents.node.Node;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -15,14 +13,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import javafx.scene.control.Button;
-
-import java.awt.event.ActionEvent;
-
-import javafx.event.*;
-
 import java.util.ArrayList;
 
+/**
+ * The display controller for the fxml display. This controller is assigned to the fxml file at program run time in
+ * MainApp. Creates the initial map and agents table, and provides a method to update a node's display.
+ */
 public class DisplayController {
     /** Graphics Components **/
     @FXML private Pane nodePane;
@@ -30,11 +26,8 @@ public class DisplayController {
     @FXML private TableView table;
     private TableColumn agentId = new TableColumn("Agent Id");
     private TableColumn agentCreatedAt = new TableColumn("Created At");
-    private boolean started;
-
     private ArrayList<Circle> nodeCircles = new ArrayList<>();
-
-
+    private boolean started;
 
     /**
      * Display the initial map of nodes and edges. The FXML file contains a StackPane with the nodePane on
@@ -71,12 +64,10 @@ public class DisplayController {
             edgePane.getChildren().add(line);
         }
         displayTable();
-
-
     }
 
     /**
-     * Reads a given node's state and paints it an appropriate color
+     * Reads a given node's state and paints its appropriate colors. Nodes with agents receive a ring.
      * @param node Node to paint
      */
     public void paintNode(Node node) {
@@ -133,8 +124,8 @@ public class DisplayController {
     }
 
     /**
-     * Add cell properties to the table columns and add the columns to the table. The TableView table object is created
-     * in the fxml file.
+     * Add cell properties to the table columns and add the columns to the table. The TableView table object is
+     * instantiated in the fxml file.
      */
     public void displayTable() {
         table.getColumns().addAll(agentId, agentCreatedAt);
@@ -143,7 +134,7 @@ public class DisplayController {
     }
 
     /**
-     * Update the base station's table of agents
+     * Update the base station's table of agents.
      */
     public void updateTable(ObservableList<Message> agentsList) {
         table.setItems(agentsList);
@@ -151,14 +142,19 @@ public class DisplayController {
 
 
     @FXML
+    /**
+     * Called by the fxml file when the start button is clicked.
+     */
     public void startButtonPressed() {
         started = true;
 
     }
 
+    /**
+     * Check if the UI has been started or not
+     * @return started
+     */
     public boolean isStarted() {
         return started;
     }
-
-
 }

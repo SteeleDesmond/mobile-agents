@@ -11,11 +11,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.Duration;
-import java.io.*;
 
-import javafx.scene.Parent;
 /**
- * Initiates display and starts coordinator
+ * Initiates display and updates coordinator. If coordinator is done it ends the program. This class is used for java
+ * implementation purposes and is not included in the design diagram. The config files are located in the docs/
+ * directory.
  */
 public class MainApp extends Application {
 
@@ -34,7 +34,8 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(dc);
 
-        BorderPane rootPane = loader.load(getClass().getClassLoader().getResourceAsStream(("MobileAgents/resources/ma-display.fxml")));
+        BorderPane rootPane = loader.load(getClass().getClassLoader()
+                .getResourceAsStream(("MobileAgents/resources/ma-display.fxml")));
 
         primaryStage.setScene(new Scene(rootPane));
         primaryStage.show();

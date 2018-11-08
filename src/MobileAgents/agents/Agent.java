@@ -13,10 +13,8 @@ public class Agent extends Thread {
     private int xpos; // agents x position
     private int ypos; // agents y position
     private int agentID;
-
     private boolean isSearching = true; // true when the agent should perform random walk
-
-    public boolean done = false;
+    private boolean done = false;
 
     public Agent(int id, Node node) {
         currentNode = node;
