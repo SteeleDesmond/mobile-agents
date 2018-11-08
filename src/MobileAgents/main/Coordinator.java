@@ -7,7 +7,7 @@ import java.util.TimerTask;
 import java.util.Timer;
 
 import MobileAgents.agents.Agent;
-import javafx.fxml.FXML;
+
 
 /**
  * Coordinator manages the simulation. Instantiates and manage all threads. It creates a map based on the given config
@@ -17,9 +17,10 @@ public class Coordinator extends Thread {
 
     private Map map;
     private Agent agent; // The initial agent created at the station
-    private boolean startFire;
     private int fireSpreadTimer = 10000; // ms
-    private boolean done = false;
+    private boolean startFire;
+    private boolean done = false; //controls the fire spreading  thread
+    private boolean finished = false; // signals that all threads have been killed
 
     /**
      * On creation, generate the map and start the node threads.
@@ -41,10 +42,11 @@ public class Coordinator extends Thread {
         if (map.isStarted() && !startFire) {
             startMap();
         }
+
         // all the nodes are on fire so kill all the threads
         if (map.isFinished()) {
             map.paintMap(); // paint the remaining fire node
-            killAll();
+            finished = true;
         }
     }
 
@@ -106,18 +108,29 @@ public class Coordinator extends Thread {
      * Terminate all running threads
      */
     public void killAll() {
-        if(!done) {
-            System.out.println("Program is finished, all the nodes have been set on fire");
-        }
-        agent.setDone(true); // kill agents thread
-        this.done = true; // kill fire spreading thread
+
+        //kill the main agent thread
+        agent.setDone(true);
+
+        //kill all the clone agents threads
+        agent.killAllCloneAgentsThreads();
+
         //kill any remaining node threads (safety check -- they should already be finished)
         for (int i = 0; i < map.getAllNodes().size(); i++) {
             map.getAllNodes().get(i).terminate();
         }
+
+        done = true; // kill fire spreading thread
+
+        finished = true;
+
+        System.out.println("All threads have ended, program is finished");
     }
 
-    public boolean isDone() {
-        return done;
+    /**
+     * @return if the Coordinator is done with its job
+     */
+    public boolean isFinished() {
+        return finished;
     }
 }

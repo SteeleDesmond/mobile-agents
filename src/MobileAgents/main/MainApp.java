@@ -50,16 +50,17 @@ public class MainApp extends Application {
             public void handle(long now) {
 
                 if (now > nextTime) {
-                    coordinator.update();
-                    nextTime = now + Duration.ofSeconds(1).toMillis();
-                    if (coordinator.isDone()) {
+                    if (coordinator.isFinished()) {
                         coordinator.killAll();
-
+                        stop();
+                    } else {
+                        coordinator.update();
+                        nextTime = now + Duration.ofSeconds(1).toMillis();
                     }
+
                 }
 
             }
-
 
         };
         a.start();

@@ -15,12 +15,14 @@ public class Agent extends Thread {
     private int agentID;
     private boolean isSearching = true; // true when the agent should perform random walk
     private boolean done = false;
+    private ArrayList<Agent> agentCloneList = new ArrayList<>();
 
     public Agent(int id, Node node) {
         currentNode = node;
         agentID = id;
         xpos = node.getXPos();
         ypos = node.getYPos();
+
     }
 
     /**
@@ -152,10 +154,23 @@ public class Agent extends Thread {
                     id = getAgentID() + 1;
                     setAgentId(id);
 
+
                     // Send new clone's information to the base station
                     Message msg = new Message(id, n.getNodeId());
                     currentNode.sendMsg(msg);
                     System.out.println("Message sent: " + msg.toString());
+
+                    //create a clone
+                    Agent agent_clone = new Agent(id, this.getCurrentNode());
+
+                    //clones don't need to random walk
+                    agent_clone.setDone(true);
+
+                    //start the clones thread
+                    agent_clone.start();
+
+                    //add the clone to clone list
+                    agentCloneList.add(agent_clone);
 
                     //let the node know if it has an agent on it
                     n.setHasAgent(true);
@@ -247,6 +262,22 @@ public class Agent extends Thread {
      */
     public void setAgentId(int id) {
         agentID = id;
+    }
+
+    /**
+     * @return A list of all the created clone agents
+     */
+    public ArrayList<Agent> getAllCloneAgents() {
+        return agentCloneList;
+    }
+
+    /**
+     * Kill all the clone agents threads
+     */
+    public void killAllCloneAgentsThreads() {
+        for (int i = 0; i < getAllCloneAgents().size(); i++) {
+            getAllCloneAgents().get(i).setDone(true);
+        }
     }
 
     @Override

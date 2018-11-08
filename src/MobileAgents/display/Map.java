@@ -236,7 +236,7 @@ public class Map {
      */
     public boolean isFinished() {
         for (Node n : nodes) {
-            if (n.getNodeState().equals("fire")) {
+            if (!n.getNodeState().equals("fire")) {
                 return false;
             }
         }
