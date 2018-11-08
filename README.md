@@ -107,6 +107,10 @@ The agent sometimes doesn't clone itself onto blue nodes
 
 Agents don't always send a message when they are cloned
 
+When an agent is on the Station node it isn't properly displayed with a ring. 
+This is because the state of the Station node is set to "Station" instead of 
+near-fire, standard, or fire, and it isn't accounted for.
+
 ## Project Design Concerns
 
 The program can handle large graph inputs in the configuration file. However, the
