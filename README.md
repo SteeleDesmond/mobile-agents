@@ -10,6 +10,9 @@ Brandon Wade
 
 Version 1.0 - Current working version that meets requirements
 
+Version 1.1 - Clones now have there own threads, Program properly terminates
+when all the nodes have caught on fire
+
 ## How to use this program
 
 ### Quickstart
@@ -101,7 +104,7 @@ termination or if it is stuck somewhere and it isn't getting back to the station
 This will print to the console if such a case arises.
 
 
-## Bugs
+## Version 1.0 Bugs
 
 The agent sometimes doesn't clone itself onto blue nodes
 
@@ -110,6 +113,19 @@ Agents don't always send a message when they are cloned
 When an agent is on the Station node it isn't properly displayed with a ring. 
 This is because the state of the Station node is set to "Station" instead of 
 near-fire, standard, or fire, and it isn't accounted for.
+
+The program doesnt terminate properly when all the nodes catch on fire
+
+## Version 1.1 Bugs
+
+The agent sometimes doesn't clone itself onto blue nodes
+
+Agents don't always send a message when they are cloned
+
+When an agent is on the Station node it isn't properly displayed with a ring. 
+This is because the state of the Station node is set to "Station" instead of 
+near-fire, standard, or fire, and it isn't accounted for.
+
 
 ## Project Design Concerns
 
