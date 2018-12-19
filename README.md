@@ -1,5 +1,9 @@
 # Mobile Agents
 
+The goal of this project is to simulate and monitor a forest fire spreading through nodes in a graph. The idea is that the nodes in the graph represent sensors located in trees in a forest. As the fire spreads throughout the graph, the sensors send messages through the graph back to the base station, where information is kept pertaining to node states and agent locations. The agents in the project are sent from the base station in search of fire. When fire is found they create a ring around the fire by cloning onto nodes around it and report information to the base station.
+
+Threads: Fire spreading thread, agent thread(s), node thread(s)
+
 ## Contributors
 
 Steele Desmond
